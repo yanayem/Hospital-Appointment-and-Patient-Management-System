@@ -1,0 +1,333 @@
+/* ===========================
+   GLOBAL STYLES
+=========================== */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f4f8f9;
+  color: #1a1a1a;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* If nav is fixed */
+.top_nav_bar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+
+
+/* Consistent container spacing */
+.container {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Headings */
+h2 {
+  font-size: 2rem;
+  color: #0a7373;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  background: #00b4b4;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+}
+.btn:hover {
+  background: #008c8c;
+}
+
+/* ===========================
+   HOME SECTION
+=========================== */
+.home-section {
+  background: #9ecfd4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+
+.home-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  color: #fff;
+  gap: 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.home-container .content {
+  flex: 1;
+}
+
+.home-container .content h1 {
+  font-size: 2.8rem;
+  color: #0a0a0a;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.home-container .content p {
+  margin-bottom: 25px;
+  color: #222;
+  line-height: 1.6;
+}
+
+.home-container .right {
+  flex: 1;
+}
+
+.home-container .right img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* ===========================
+   WHO WE ARE
+=========================== */
+.about-section {
+  background: #eaf7f8;
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.about-section p {
+  max-width: 800px;
+  margin: 0 auto;
+  color: #444;
+}
+
+/* ===========================
+   SERVICES
+=========================== */
+.services-section {
+  background: #f9ffff;
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.service-box {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+.service-box:hover {
+  transform: translateY(-5px);
+}
+
+.service-box i {
+  font-size: 2rem;
+  color: #00a1a1;
+  margin-bottom: 10px;
+}
+
+/* ===========================
+   DOCTORS SLIDER
+=========================== */
+.doctors-section {
+  background: #eafaf9;
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.doctor-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+.doctor-track {
+  display: flex;
+  transition: transform 0.5s ease;
+  gap: 20px;
+}
+
+.doctor-card {
+  min-width: 250px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.doctor-card img {
+  width: 100%;
+  border-radius: 10px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.doctor-card h3 {
+  margin: 15px 0 5px;
+}
+
+.slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #00b4b4;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.3s;
+}
+.slide-btn:hover {
+  background: #008c8c;
+}
+.prev {
+  left: 10px;
+}
+.next {
+  right: 10px;
+}
+
+/* ===========================
+   CONTACT SECTION
+=========================== */
+.contact-section {
+  background: #f3fbfc;
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: none;
+}
+
+.contact-form .btn {
+  width: 100%;
+  background: #00a1a1;
+  color: #fff;
+  border: none;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+=========================== */
+
+/* Tablets and below */
+@media (max-width: 1024px) {
+  .container {
+    padding: 100px 40px 60px 40px;
+  }
+
+  .home-container {
+    padding: 40px;
+  }
+
+  .home-container .content h1 {
+    font-size: 2.3rem;
+  }
+
+  .home-container .content p {
+    font-size: 1rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .container {
+    padding: 80px 25px 50px 25px;
+  }
+
+  /* Home Section */
+  .home-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .home-container .right {
+    order: -1;
+  }
+
+  /* Doctor Cards */
+  .doctor-card {
+    min-width: 220px;
+  }
+
+  /* Reduce heading size */
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  .slide-btn {
+    padding: 8px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .container {
+    padding: 60px 15px 40px 15px;
+  }
+
+  .home-container .content h1 {
+    font-size: 1.8rem;
+  }
+
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .doctor-card {
+    min-width: 200px;
+  }
+
+  .contact-form {
+    width: 100%;
+  }
+}

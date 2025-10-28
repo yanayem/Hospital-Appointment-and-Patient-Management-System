@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - Hospital Management</title>
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/static/css/about.css" />
+  </head>
+  <body>
+    {% include "nav.html" %}
+    <!-- Intro Section -->
+    <header>
+      <h1>About US</h1>
+    </header>
+    <section class="intro" data-animate="fade-up">
+      <div class="container">
+        <div class="text-sec">
+          <h2>Welcome to HealthCare+ Hospital</h2>
+          <p>
+            We provide top-notch healthcare services with a focus on patient
+            care, innovation, and professionalism.
+          </p>
+        </div>
+        <div class="img-sec">
+          <img src="/static/media/hospital.jpg" alt="Hospital" />
+        </div>
+      </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about-us" data-animate="fade-up">
+      <div class="container reverse">
+        <div class="img-sec">
+          <img src="/static/media/aboutus.jpg" alt="About Us" />
+        </div>
+        <div class="text-sec">
+          <h2>About Us</h2>
+          <p>
+            HealthCare+ Hospital has been providing excellent healthcare
+            services for over 20 years. Our mission is to combine technology,
+            expertise, and compassion to deliver exceptional patient care.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section class="contact-us" data-animate="fade-up">
+      <div class="container">
+        <div class="text-sec">
+          <h2>Contact Us</h2>
+          <p>Email: info@healthcareplus.com</p>
+          <p>Phone: +123 456 7890</p>
+          <p>Address: 123 Main Street, City, Country</p>
+        </div>
+        <div class="img-sec">
+          <img src="/static/media/cont.jpg" alt="Contact" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Developer Team Section -->
+    <section class="team" data-animate="fade-up">
+      <div class="container">
+        <div class="dev_text">
+          <h2>Our Development Team</h2>
+          <p>
+            Meet the brilliant minds who design, develop, and maintain our
+            hospital management system.
+          </p>
+        </div>
+        <div class="team-grid">
+          <div class="team-card">
+            <img src="/static/media/eva.png" alt="Sayma" />
+            <h3>Sayma</h3>
+            <p>Backend</p>
+            <div class="socials">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="team-card">
+            <img src="/static/media/prottu.png" alt="Jannat P" />
+            <h3>Jannat P</h3>
+            <p>Frontend</p>
+            <div class="socials">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="team-card">
+            <img src="/static/media/maria.png" alt="Maria" />
+            <h3>Maria</h3>
+            <p>Data Analyst</p>
+            <div class="socials">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="team-card">
+            <img src="/static/media/nabiha.png" alt="Nabiha" />
+            <h3>Nabiha</h3>
+            <p>Frontend</p>
+            <div class="socials">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="team-card">
+            <img src="/static/media/taha.png" alt="Taha" />
+            <h3>Taha</h3>
+            <p>Backend</p>
+            <div class="socials">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="team-card">
+            <img src="/static/media/nirala.png" alt="Nirala" />
+            <h3>Nirala</h3>
+            <p>UI/UX Designer</p>
+            <div class="socials">
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% include "footer.html" %}
+    <script src="/static/js/about.js"></script>
+  </body>
+</html>

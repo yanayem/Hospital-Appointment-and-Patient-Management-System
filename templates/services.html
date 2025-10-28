@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Services</title>
+  <link rel="stylesheet" href="/static/css/services.css">
+</head>
+<body>
+   {% include "nav.html" %}
+
+  <header class="header">
+    <h1>Our Services</h1>
+    <p>Providing the best healthcare solutions for you</p>
+  </header>
+
+  <section class="services-section">
+    <div class="service" onclick="toggleDetails(this)">
+      <h2>General Consultation</h2>
+      <p class="details">Expert doctors available for general check-ups.</p>
+    </div>
+    <div class="service" onclick="toggleDetails(this)">
+      <h2>Pediatrics</h2>
+      <p class="details">Special care for children and newborns.</p>
+    </div>
+    <div class="service" onclick="toggleDetails(this)">
+      <h2>Cardiology</h2>
+      <p class="details">Heart health services with experienced cardiologists.</p>
+    </div>
+    <div class="service" onclick="toggleDetails(this)">
+      <h2>Neurology</h2>
+      <p class="details">Advanced treatment for neurological conditions.</p>
+    </div>
+  </section>
+{% include "footer.html" %}
+  <script>
+    // Toggle service details when clicked
+function toggleDetails(element) {
+  element.classList.toggle("active");
+}
+
+  </script>
+</body>
+</html>

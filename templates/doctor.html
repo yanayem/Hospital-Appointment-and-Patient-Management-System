@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Doctors List</title>
+    <link rel="stylesheet" href="{% static 'css/doctor.css' %}" />
+  </head>
+  <body>
+    {% include "nav.html" %}
+    <header><h1>Our Doctors</h1></header>
+    <div id="doctor-container" class="doctor-container"></div>
+    {% include "footer.html" %}
+    <!-- Load JS -->
+    <script src="{% static 'js/doctordata.js' %}"></script>
+    <script src="{% static 'js/doctor.js' %}"></script>
+  </body>
+</html>

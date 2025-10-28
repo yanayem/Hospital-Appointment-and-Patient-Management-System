@@ -1,0 +1,214 @@
+/* =========================
+   GLOBAL STYLES
+========================= */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f4f8f9;
+  color: #1a1a1a;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #0a7373;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+header {
+  background-color: #0077b6;
+  color: white;
+  text-align: center;
+  padding: 80px 0 40px; /* extra top padding */
+}
+
+header h1 {
+  font-size: 2rem;
+}
+
+/* =========================
+   CONTAINER & SECTION
+========================= */
+section {
+  padding: 60px 20px; /* top & bottom padding for every section */
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  box-sizing: border-box;
+}
+
+/* =========================
+   TEXT & IMAGE SECTIONS
+========================= */
+.text-sec {
+  flex: 1;
+  min-width: 300px;
+}
+
+.img-sec {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.img-sec img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Reverse layout for About section */
+.reverse {
+  flex-direction: row-reverse;
+}
+
+/* =========================
+   DEVELOPER TEAM
+========================= */
+/* Developer Team Section */
+.team {
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  display: flex;
+}
+
+.team .dev_text h2 {
+  margin-bottom: 40px; /* spacing between title and grid */
+  font-size: 2rem;
+  color: #0a7373;
+}
+
+.team h2 {
+  margin-bottom: 40px;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-top: 0; /* remove any extra margin */
+}
+/* Developer card */
+.team-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.5s, box-shadow 0.5s;
+}
+
+.team-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.team-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.team-card h3 {
+  margin-bottom: 8px;
+}
+
+.team-card p {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* Social Icons */
+.socials a {
+  color: #0a7373;
+  margin: 0 8px;
+  font-size: 1.2rem;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.socials a:hover {
+  color: #00b4b4;
+  transform: scale(1.2);
+}
+
+/* =========================
+   SCROLL ANIMATIONS
+========================= */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease-out;
+}
+
+[data-animate].animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .img-sec {
+    max-width: 100%;
+    height: 250px;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .img-sec {
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .img-sec {
+    height: 180px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+}
+

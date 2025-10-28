@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Management | Home</title>
+    <link rel="stylesheet" href="/static/css/home.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    {% include "nav.html" %}
+
+    <!-- ================= HOME / INTRO ================= -->
+    <section class="home-section">
+      <div class="container home-container">
+        <div class="content">
+          <h1>We Help People Get Appointments Online</h1>
+          <p>
+            Book, track, and manage your medical appointments with ease.
+            Connect with top doctors and access your health records anytime.
+          </p>
+          <a href="#" class="btn">Get Started</a>
+        </div>
+        <div class="right">
+          <img src="/static/media/Vector.png" alt="Hospital Service" />
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================= WHO WE ARE ================= 
+    <section class="about-section">
+      <div class="container">
+        <h2>Who We Are</h2>
+        <p>
+          We are a team of professionals dedicated to building a bridge between
+          patients and hospitals. Our mission is to make healthcare easily
+          accessible through technology.
+        </p>
+      </div>
+    </section> -->
+
+    <!-- ================= SERVICES ================= 
+    <section class="services-section">
+      <div class="container">
+        <h2>Our Services</h2>
+        <div class="service-grid">
+          <div class="service-box">
+            <i class="fas fa-user-md"></i>
+            <h3>Online Appointments</h3>
+            <p>Book doctors instantly from the comfort of your home.</p>
+          </div>
+          <div class="service-box">
+            <i class="fas fa-hospital"></i>
+            <h3>Hospital Management</h3>
+            <p>Streamline operations and patient management efficiently.</p>
+          </div>
+          <div class="service-box">
+            <i class="fas fa-file-medical"></i>
+            <h3>Medical Records</h3>
+            <p>Access all your reports and prescriptions digitally.</p>
+          </div>
+          <div class="service-box">
+            <i class="fas fa-ambulance"></i>
+            <h3>Emergency Care</h3>
+            <p>Instant response and ambulance booking at your fingertips.</p>
+          </div>
+        </div>
+      </div>
+    </section>-->
+
+    <!-- ================= DOCTORS (SLIDER) ================= 
+    <section class="doctors-section">
+      <div class="container">
+        <h2>Our Doctors</h2>
+        <div class="doctor-slider">
+          <button class="slide-btn prev"><i class="fas fa-chevron-left"></i></button>
+          <div class="doctor-track">
+            <div class="doctor-card">
+              <img src="/static/media/doctor1.jpg" alt="Doctor 1" />
+              <h3>Dr. Sarah Ali</h3>
+              <p>Cardiologist</p>
+            </div>
+            <div class="doctor-card">
+              <img src="/static/media/doctor2.jpg" alt="Doctor 2" />
+              <h3>Dr. James Khan</h3>
+              <p>Neurologist</p>
+            </div>
+            <div class="doctor-card">
+              <img src="/static/media/doctor3.jpg" alt="Doctor 3" />
+              <h3>Dr. Rina Das</h3>
+              <p>Pediatrician</p>
+            </div>
+            <div class="doctor-card">
+              <img src="/static/media/doctor4.jpg" alt="Doctor 4" />
+              <h3>Dr. Arif Rahman</h3>
+              <p>Orthopedic</p>
+            </div>
+            <div class="doctor-card">
+              <img src="/static/media/doctor5.jpg" alt="Doctor 5" />
+              <h3>Dr. Naila Noor</h3>
+              <p>Dermatologist</p>
+            </div>
+            <div class="doctor-card">
+              <img src="/static/media/doctor6.jpg" alt="Doctor 6" />
+              <h3>Dr. Imran Hossain</h3>
+              <p>ENT Specialist</p>
+            </div>
+          </div>
+          <button class="slide-btn next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </section>-->
+ 
+    <!-- ================= CONTACT / MESSAGE ================= -->
+    <section class="contact-section">
+      <div class="container">
+        <h2>Send Us a Message</h2>
+        <form class="contact-form">
+          <input type="text" placeholder="Your Name" required />
+          <input type="email" placeholder="Your Email" required />
+          <textarea placeholder="Your Message" required></textarea>
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+      </div>
+    </section>
+
+    {% include "footer.html" %}
+    <script src="/static/js/home.js"></script>
+  </body>
+</html>

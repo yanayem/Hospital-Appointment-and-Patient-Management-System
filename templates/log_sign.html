@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Management | Login & Register</title>
+<link rel="stylesheet" href="/static/css/log_sign.css">
+</head>
+<body>
+
+<div class="logo"><a href="/"><img src="/static/media/logo.png" alt="Logo"><span>Hospital Management</span></a></div>
+
+
+<div class="form-container">
+  <!-- LOGIN FORM -->
+  <form id="login-form" class="login_container active">
+    <div class="row">
+      <div class="input-group">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" placeholder="Enter your email" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-group">
+        <label for="login-password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="login-password" placeholder="Enter password" required>
+          <span class="toggle-password" onclick="togglePassword('login-password')">&#128065;</span>
+        </div>
+      </div>
+    </div>
+    <div class="text-link" onclick="forgotPassword()">Forgot Password?</div>
+    <button type="submit" class="btn submit" onclick="submitLogin(event)">Login</button>
+    <div class="text-link" onclick="showSignup()">No account? Register</div>
+  </form>
+
+  <!-- SIGNUP FORM -->
+  <form id="signup-form" class="signup_container">
+    <div class="user-type-select">
+      <button type="button" class="active" data-type="patient">Patient</button>
+      <button type="button" data-type="doctor">Doctor</button>
+      <button type="button" data-type="admin">Admin</button>
+    </div>
+    <div id="signup-fields"></div>
+    <button type="submit" class="btn submit" onclick="submitSignup(event)">Register</button>
+    <div class="text-link" onclick="showLogin()">Already have an account? Login</div>
+  </form>
+</div>
+
+ <script src="/static/js/log_sign.js"></script>
+</body>
+</html>
