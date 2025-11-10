@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVA Smart Hospital | Our Services</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <style>
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { opacity: 0; animation: fadeUp 1s ease forwards; }
+  </style>
+</head>
+
+<body class="bg-[#fff7fa] text-gray-800 overflow-x-hidden">
+  {% include "nav.html" %}
+
+  <!-- 🌸 HEADER -->
+  <header class="text-center py-24 bg-gradient-to-r from-pink-300 via-rose-300 to-rose-400 text-white mt-[70px] shadow-md">
+    <h1 class="text-5xl font-bold mb-4 tracking-tight drop-shadow-md">Our Medical Services</h1>
+    <p class="text-xl max-w-3xl mx-auto opacity-90">We combine expert care, technology, and compassion to make healthcare seamless and accessible for everyone.</p>
+  </header>
+
+  <!-- 🏥 SERVICES -->
+  <section class="max-w-5xl mx-auto px-6 py-20 flex flex-col gap-8">
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(".service-card");
+        cards.forEach((card, index) => {
+          setTimeout(() => { card.classList.add("fade-up"); }, index * 150);
+        });
+      });
+    </script>
+
+    <!-- Reusable Card -->
+    {% for service in services %}
+    {% endfor %}
+    
+    <!-- Each Card -->
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-rose-600">
+        <i class="fa-solid fa-stethoscope"></i> General Consultation
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Routine checkups, preventive care, and medical guidance for all ages — ensuring your everyday wellness.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-pink-500">
+        <i class="fa-solid fa-baby"></i> Pediatrics
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Specialized care for infants, children, and adolescents — including vaccinations and developmental assessments.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-rose-500">
+        <i class="fa-solid fa-heart-pulse"></i> Cardiology
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Heart disease diagnosis, treatment, ECG, ECHO, angiography, and advanced cardiac rehabilitation programs.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-pink-400">
+        <i class="fa-solid fa-brain"></i> Neurology
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Comprehensive neurological care — migraine, epilepsy, stroke recovery, and neurodegenerative disorders.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-rose-400">
+        <i class="fa-solid fa-female"></i> Gynecology & Maternity
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">From prenatal to postnatal — trusted care for women’s health, fertility, and safe deliveries.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-rose-600">
+        <i class="fa-solid fa-bone"></i> Orthopedics
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Expert bone, joint, and muscle treatments — sports injuries, arthritis, and physiotherapy care.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-pink-400">
+        <i class="fa-solid fa-spa"></i> Dermatology & Skin Care
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Laser therapy, acne solutions, hair treatments, and modern cosmetic dermatology.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-rose-500">
+        <i class="fa-solid fa-x-ray"></i> Radiology & Imaging
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">X-ray, CT, MRI, and ultrasound — advanced diagnostic imaging with rapid digital reports.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-pink-500">
+        <i class="fa-solid fa-vials"></i> Pathology & Diagnostics
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Accurate lab tests and reports integrated with your online patient portal for easy access.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-rose-600">
+        <i class="fa-solid fa-truck-medical"></i> 24/7 Emergency & ICU
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Critical care and life-saving response, available 24/7 with trained medical teams.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-pink-500">
+        <i class="fa-solid fa-droplet"></i> Blood Bank
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Reliable blood donation, matching, and storage services supporting emergency operations.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-rose-500">
+        <i class="fa-solid fa-ambulance"></i> Ambulance Service
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">24/7 emergency ambulances with real-time GPS tracking and paramedic support for urgent transfers.</p>
+    </div>
+
+    <div class="service-card bg-white rounded-2xl shadow-lg p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 cursor-pointer"
+         onclick="toggleDetails(this)">
+      <h2 class="text-3xl font-semibold flex items-center gap-4 text-rose-400">
+        <i class="fa-solid fa-laptop-medical"></i> Smart Health & Telemedicine
+      </h2>
+      <p class="details mt-4 text-lg text-gray-700 hidden">Book appointments, video consults, and manage prescriptions online with our smart system.</p>
+    </div>
+  </section>
+
+  {% include "footer.html" %}
+
+  <script>
+    function toggleDetails(el) {
+      const details = el.querySelector(".details");
+      details.classList.toggle("hidden");
+    }
+  </script>
+</body>
+</html>

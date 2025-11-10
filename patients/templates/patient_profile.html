@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <style>
+    .fade-in {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-pink-100 via-rose-50 to-lavender-100 font-sans min-h-screen flex flex-col items-center justify-center px-4 py-10">
+
+  {% include "patient_sidebar.html" %}
+
+  <div class="w-full flex flex-col items-center space-y-8 fade-in">
+    
+    <!-- Profile Card -->
+    <div class="glass-card rounded-3xl shadow-2xl p-8 sm:p-10 w-full max-w-2xl flex flex-col sm:flex-row items-center justify-center sm:justify-start space-y-6 sm:space-y-0 sm:space-x-8 transition transform hover:scale-[1.02] hover:shadow-pink-200/70">
+      
+      <!-- Avatar -->
+      <div class="relative">
+        <div id="avatarDiv" class="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-pink-200 to-rose-300 flex items-center justify-center text-white text-6xl shadow-lg overflow-hidden border-4 border-pink-100">
+          {% if profile.profile_pic %}
+            <img src="{{ profile.profile_pic.url }}" alt="Profile" class="w-full h-full object-cover">
+          {% else %}
+            {% if patient.gender == "Male" %}
+              <img src="https://cdn-icons-png.flaticon.com/512/4140/4140061.png" alt="Male Avatar" class="w-full h-full object-cover">
+            {% elif patient.gender == "Female" %}
+              <img src="https://cdn-icons-png.flaticon.com/512/4140/4140051.png" alt="Female Avatar" class="w-full h-full object-cover">
+            {% else %}
+              <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt="Neutral Avatar" class="w-full h-full object-cover">
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <!-- Upload Btn -->
+        <button type="button" id="changeAvatarBtn" class="absolute bottom-1 right-10 bg-white rounded-full p-2 shadow-lg hover:bg-pink-200 transition">
+          <i class="fas fa-camera text-pink-500 text-lg"></i>
+        </button>
+
+        <!-- Delete Btn -->
+        {% if profile.profile_pic %}
+        <form method="POST" action="{% url 'delete_patient_pic' %}" class="absolute bottom-1 right-1">
+          {% csrf_token %}
+          <button type="submit" class="bg-white rounded-full p-2 shadow-lg hover:bg-red-200 transition" onclick="return confirm('Remove your profile picture?')">
+            <i class="fas fa-trash text-red-500 text-lg"></i>
+          </button>
+        </form>
+        {% endif %}
+
+        <form id="avatarForm" method="POST" enctype="multipart/form-data" class="hidden">
+          {% csrf_token %}
+          <input type="file" id="avatarInput" name="profile_pic" accept="image/*">
+        </form>
+      </div>
+
+      <!-- Info -->
+      <div class="text-center sm:text-left">
+        <h2 class="text-2xl sm:text-3xl font-bold text-pink-600">{{ patient.name }}</h2>
+        <p class="text-gray-700 capitalize">{{ patient.user_type }}</p>
+      </div>
+    </div>
+
+    <!-- Info Card -->
+    <div id="infoCard" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 w-full max-w-2xl transition transform hover:scale-[1.01] hover:shadow-rose-200/70">
+
+      {% if messages %}
+        <div class="mb-4 space-y-1">
+          {% for message in messages %}
+            <div class="text-green-600 font-semibold bg-green-100 px-4 py-2 rounded-lg">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form id="profileForm" method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        <!-- Editable Fields -->
+        <div id="editView" class="space-y-4 hidden">
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Full Name</label>
+            <input type="text" name="name" value="{{ patient.name }}" placeholder="Full Name"
+                   class="w-full border border-pink-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white/70">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Email</label>
+            <input type="email" name="email" value="{{ patient.email }}" placeholder="Email"
+                   class="w-full border border-pink-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white/70">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Phone</label>
+            <input type="text" name="phone" value="{{ patient.phone }}" placeholder="Phone"
+                   class="w-full border border-pink-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white/70">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Age</label>
+            <input type="number" name="age" value="{{ patient.age }}" placeholder="Age"
+                   class="w-full border border-pink-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white/70">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Gender</label>
+            <select id="genderSelect" name="gender"
+                    class="w-full border border-pink-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white/70">
+              {% for g in genders %}
+                <option value="{{ g }}" {% if g == patient.gender %}selected{% endif %}>{{ g }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Blood Group</label>
+            <select name="blood_group"
+                    class="w-full border border-pink-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white/70">
+              {% for bg in blood_groups %}
+                <option value="{{ bg }}" {% if bg == patient.blood_group %}selected{% endif %}>{{ bg }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-1">Address</label>
+            <textarea name="address" rows="3" placeholder="Address"
+                      class="w-full border border-pink-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white/70">{{ patient.address }}</textarea>
+          </div>
+        </div>
+
+        <!-- Read-only View -->
+        <div id="readView" class="space-y-2 text-gray-700 text-base lg:text-lg">
+          <p><strong>Email:</strong> {{ patient.email }}</p>
+          <p><strong>Phone:</strong> {{ patient.phone }}</p>
+          <p><strong>Age:</strong> {{ patient.age }}</p>
+          <p><strong>Gender:</strong> {{ patient.gender }}</p>
+          <p><strong>Blood Group:</strong> {{ profile.blood_group }}</p>
+          <p><strong>Address:</strong> {{ profile.address }}</p>
+        </div>
+
+        <div class="flex justify-center sm:justify-end gap-3 mt-4">
+          <button type="button" id="toggleBtn" class="bg-pink-500 text-white px-5 py-2 rounded-xl hover:bg-pink-600 transition">Edit</button>
+          <button type="submit" id="saveBtn" class="bg-green-500 text-white px-5 py-2 rounded-xl hover:bg-green-600 transition hidden">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS Section -->
+  <script>
+    // Avatar upload
+    const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarForm = document.getElementById('avatarForm');
+    changeAvatarBtn.addEventListener('click', () => avatarInput.click());
+    avatarInput.addEventListener('change', () => avatarForm.submit());
+
+    // Toggle edit/save
+    const toggleBtn = document.getElementById('toggleBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const readView = document.getElementById('readView');
+    const editView = document.getElementById('editView');
+    toggleBtn.addEventListener('click', () => {
+      const editing = !editView.classList.contains('hidden');
+      if (editing) {
+        editView.classList.add('hidden');
+        readView.classList.remove('hidden');
+        saveBtn.classList.add('hidden');
+        toggleBtn.textContent = 'Edit';
+      } else {
+        editView.classList.remove('hidden');
+        readView.classList.add('hidden');
+        saveBtn.classList.remove('hidden');
+        toggleBtn.textContent = 'Cancel';
+      }
+    });
+
+    // Avatar preview & gender change
+    const avatarDiv = document.getElementById("avatarDiv");
+    const profilePicInput = document.getElementById("avatarInput");
+    const genderSelect = document.getElementById("genderSelect");
+
+    profilePicInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          avatarDiv.innerHTML = `<img src="${ev.target.result}" class="w-full h-full rounded-full object-cover fade-in">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    if (genderSelect) {
+      genderSelect.addEventListener("change", () => {
+        const g = genderSelect.value;
+        if (!profilePicInput.files.length) {
+          let avatarUrl = "";
+          if (g === "Male") avatarUrl = "https://cdn-icons-png.flaticon.com/512/4140/4140061.png";
+          else if (g === "Female") avatarUrl = "https://cdn-icons-png.flaticon.com/512/4140/4140051.png";
+          else avatarUrl = "https://cdn-icons-png.flaticon.com/512/747/747376.png";
+          avatarDiv.innerHTML = `<img src="${avatarUrl}" class="w-full h-full rounded-full object-cover fade-in">`;
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

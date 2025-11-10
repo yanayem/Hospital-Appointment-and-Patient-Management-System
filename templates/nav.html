@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Management 🌸</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      .scrolled {
+        background: linear-gradient(90deg, #f9c5d1, #f8a1c4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+      .active-link {
+        color: #be185d !important;
+        font-weight: 700;
+        border-bottom: 3px solid #ec4899;
+      }
+      nav {
+        transition: all 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+
+  <body class="bg-pink-50">
+    <!-- 🌸 Desktop Navbar -->
+    <nav
+      id="desktopNav"
+      class="hidden md:flex fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-pink-200 via-pink-100 to-pink-200 shadow-md py-3"
+    >
+      <div class="container mx-auto flex items-center justify-between px-8">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <img
+            src="{% static 'media/logo.png' %}"
+            alt="Logo"
+            class="w-10 h-10 rounded-lg"
+          />
+          <span class="text-2xl font-bold text-pink-700"
+            >Hospital Management</span
+          >
+        </div>
+
+        <!-- Menu -->
+        <ul class="flex space-x-10 font-semibold text-lg">
+          <li>
+            <a
+              href="{% url 'homepage' %}"
+              class="pb-1 hover:text-pink-600 transition {% if request.path == '/' %}active-link{% endif %}"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'DoctorInfo' %}"
+              class="pb-1 hover:text-pink-600 transition {% if request.path == '/doctorinfo/' %}active-link{% endif %}"
+              >Doctor</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'ServicesPage' %}"
+              class="pb-1 hover:text-pink-600 transition {% if request.path == '/services/' %}active-link{% endif %}"
+              >Service</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'ambulance_page' %}"
+              class="pb-1 hover:text-pink-600 transition {% if request.path == '/ambulance/' %}active-link{% endif %}"
+              >Ambulance</a
+            >
+          </li>
+          <li>
+            <a
+              href="{% url 'AboutUs' %}"
+              class="pb-1 hover:text-pink-600 transition {% if request.path == '/about-us/' %}active-link{% endif %}"
+              >About Us</a
+            >
+          </li>
+        </ul>
+
+        <!-- Login -->
+        <a
+          href="{% url 'LogInSignUppage' %}"
+          class="bg-pink-500 text-white px-5 py-2 rounded-xl shadow hover:bg-pink-600 transition text-lg"
+          >Login</a
+        >
+      </div>
+    </nav>
+
+    <!-- 🌸 Mobile Navbar -->
+    <nav
+      id="mobileNav"
+      class="md:hidden fixed top-0 left-0 w-full bg-gradient-to-r from-pink-200 via-pink-100 to-pink-200 z-50 shadow-md"
+    >
+      <div class="flex items-center justify-between px-6 py-3">
+        <div class="flex items-center space-x-3">
+          <img
+            src="{% static 'media/logo.png' %}"
+            alt="Logo"
+            class="w-9 h-9 rounded-lg"
+          />
+          <span class="text-xl font-semibold text-pink-700">Hospital</span>
+        </div>
+
+        <button
+          id="menuToggle"
+          class="text-pink-700 text-3xl focus:outline-none"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+      <div
+        id="mobileMenu"
+        class="hidden flex-col bg-pink-100 border-t border-pink-300 text-lg"
+      >
+        <a
+          href="{% url 'homepage' %}"
+          class="block px-6 py-3 hover:bg-pink-200 transition {% if request.path == '/' %}active-link{% endif %}"
+          >Home</a
+        >
+        <a
+          href="{% url 'DoctorInfo' %}"
+          class="block px-6 py-3 hover:bg-pink-200 transition {% if request.path == '/doctorinfo/' %}active-link{% endif %}"
+          >Doctor</a
+        >
+        <a
+          href="{% url 'ServicesPage' %}"
+          class="block px-6 py-3 hover:bg-pink-200 transition {% if request.path == '/services/' %}active-link{% endif %}"
+          >Service</a
+        >
+        <a
+          href="{% url 'ambulance_page' %}"
+          class="block px-6 py-3 hover:bg-pink-200 transition {% if request.path == '/ambulance/' %}active-link{% endif %}"
+          >Ambulance</a
+        >
+        <a
+          href="{% url 'AboutUs' %}"
+          class="block px-6 py-3 hover:bg-pink-200 transition {% if request.path == '/about-us/' %}active-link{% endif %}"
+          >About Us</a
+        >
+        <a
+          href="{% url 'LogInSignUppage' %}"
+          class="block bg-pink-500 text-white text-center py-2 mt-3 mx-6 rounded-xl hover:bg-pink-600 transition"
+          >Login</a
+        >
+      </div>
+    </nav>
+
+    <script>
+      const menuToggle = document.getElementById("menuToggle");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const desktopNav = document.getElementById("desktopNav");
+
+      menuToggle.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 40) {
+          desktopNav.classList.add("scrolled");
+        } else {
+          desktopNav.classList.remove("scrolled");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hospital Management | Login & Register</title>
+<link rel="stylesheet" href="{% static 'css/log_sign.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- Logo -->
+<div class="logo">
+  <a href="{% url 'homepage' %}">
+    <img src="{% static 'media/logo.png' %}" alt="Logo" />
+    <p>Hospital Management</p>
+  </a>
+</div>
+<body>
+
+<!-- Message Alert -->
+{% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Your login/signup form here -->
+
+<div class="form-container from-card" id="card-wrapper">
+
+  <!-- LOGIN FORM -->
+  <form id="login-form" class="login_container active" method="POST" action="{% url 'LogInSignUppage' %}">
+    {% csrf_token %}
+    <div class="row">
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter email" required />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-group">
+        <label>Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="login-password" name="password" placeholder="Enter password" required />
+          <i class="fa fa-eye" onclick="togglePassword('login-password', this)"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-link">Forgot Password?</div>
+    <button type="submit" name="login" class="btn submit">Login</button>
+    <div class="text-link" onclick="showSignup()">No account? Register</div>
+  </form>
+
+  <!-- SELECT USER TYPE -->
+  <div id="choose-signup" class="signup_container">
+    <h3>Select User Type</h3>
+    <button class="btn submit" onclick="showPatientForm()">Sign Up as Patient</button>
+    <button class="btn submit" onclick="showDoctorForm()">Sign Up as Doctor</button>
+    <div class="text-link" onclick="showLogin()">Already have an account? Login</div>
+  </div>
+
+  <!-- PATIENT SIGNUP -->
+  <form id="patient-signup" class="signup_container" method="POST" action="{% url 'LogInSignUppage' %}">
+    {% csrf_token %}
+    <h3>Patient Registration</h3>
+
+    <input type="hidden" name="user_type" value="patient">
+
+    <label>Name</label>
+    <input type="text" name="name" placeholder="Full Name" required>
+
+    <label>Email</label>
+    <input type="email" name="email" placeholder="Email" required>
+
+    <label>Phone Number</label>
+    <input type="tel" name="phone" placeholder="Phone Number" required>
+
+    <label>Password</label>
+    <div class="password-wrapper">
+      <input type="password" id="patient-password" name="password" placeholder="Password" required>
+      <i class="fa fa-eye" onclick="togglePassword('patient-password', this)"></i>
+    </div>
+
+    <label>Confirm Password</label>
+    <div class="password-wrapper">
+      <input type="password" id="patient-confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+      <i class="fa fa-eye" onclick="togglePassword('patient-confirm-password', this)"></i>
+    </div>
+
+    <label>Age</label>
+    <input type="number" name="age" placeholder="Age" required>
+
+    <label>Address</label>
+    <input type="text" name="address" placeholder="Address" required>
+
+    <button type="submit" name="signup" class="btn submit">Register as Patient</button>
+    <div class="text-link" onclick="showSignup()">Back</div>
+  </form>
+
+  <!-- DOCTOR SIGNUP -->
+  <form id="doctor-signup" class="signup_container" method="POST" action="{% url 'LogInSignUppage' %}">
+    {% csrf_token %}
+    <h3>Doctor Registration</h3>
+
+    <input type="hidden" name="user_type" value="doctor">
+
+    <label>Name</label>
+    <input type="text" name="name" placeholder="Full Name" required>
+
+    <label>Email</label>
+    <input type="email" name="email" placeholder="Email" required>
+
+    <label>Phone Number</label>
+    <input type="tel" name="phone" placeholder="Phone Number" required>
+
+    <label>Password</label>
+    <div class="password-wrapper">
+      <input type="password" id="doctor-password" name="password" placeholder="Password" required>
+      <i class="fa fa-eye" onclick="togglePassword('doctor-password', this)"></i>
+    </div>
+
+    <label>Confirm Password</label>
+    <div class="password-wrapper">
+      <input type="password" id="doctor-confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+      <i class="fa fa-eye" onclick="togglePassword('doctor-confirm-password', this)"></i>
+    </div>
+
+    <label>Specialization</label>
+    <input type="text" name="specialization" placeholder="e.g. Cardiologist" required>
+
+    <label>License Number</label>
+    <input type="text" name="license" placeholder="Medical License No." required>
+
+    <button type="submit" name="signup" class="btn submit">Register as Doctor</button>
+    <div class="text-link" onclick="showSignup()">Back</div>
+  </form>
+
+</div>
+
+<!-- Scripts -->
+<script>
+function togglePassword(fieldId, icon) {
+  const input = document.getElementById(fieldId);
+  input.type = input.type === "password" ? "text" : "password";
+  icon.classList.toggle("fa-eye");
+  icon.classList.toggle("fa-eye-slash");
+}
+
+const card = document.getElementById('card-wrapper');
+
+function showSignup(){ card.classList.add('flipped'); hideAll(); document.getElementById('choose-signup').style.display="block"; }
+function showLogin(){ card.classList.remove('flipped'); }
+function hideAll(){
+  document.getElementById('choose-signup').style.display="none";
+  document.getElementById('patient-signup').style.display="none";
+  document.getElementById('doctor-signup').style.display="none";
+}
+function showPatientForm(){ hideAll(); document.getElementById('patient-signup').style.display="block"; }
+function showDoctorForm(){ hideAll(); document.getElementById('doctor-signup').style.display="block"; }
+</script>
+</body>
+</html>

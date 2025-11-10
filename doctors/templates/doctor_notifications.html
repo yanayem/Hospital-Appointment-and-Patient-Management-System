@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔔 Doctor Notifications</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+</head>
+
+<body class="bg-gradient-to-br from-pink-50 via-pink-100 to-pink-200 min-h-screen flex font-sans">
+  {% include 'doctor_sidebar.html' %}
+
+  <!-- 🌷 Main Content -->
+  <main class="flex-1 p-6 lg:p-10 mt-16 lg:mt-10 lg:ml-64 transition-all duration-300">
+    
+    <h2 class="text-3xl md:text-4xl font-bold text-pink-600 mb-8 text-center">
+      🔔 Notifications
+    </h2>
+
+    {% if notifications %}
+      <div class="space-y-4 max-w-3xl mx-auto">
+        {% for n in notifications %}
+          <div class="bg-white/80 backdrop-blur-lg border border-pink-100 rounded-2xl shadow-md hover:shadow-xl transition p-5 flex items-start justify-between">
+            
+            <div class="flex items-start gap-4">
+              <div class="bg-pink-100 p-3 rounded-full">
+                <i class="fa-solid fa-bell text-pink-600 text-xl"></i>
+              </div>
+
+              <div>
+                <p class="text-gray-800 font-medium">{{ n.message }}</p>
+                <p class="text-gray-400 text-sm mt-1">
+                  🕒 {{ n.created_at|date:"M d, Y - H:i" }}
+                </p>
+              </div>
+            </div>
+
+            {% if not n.is_read %}
+              <span class="bg-pink-200 text-pink-700 text-xs px-3 py-1 rounded-full font-semibold shadow-sm">
+                New
+              </span>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <div class="bg-white/80 backdrop-blur-lg border border-pink-100 shadow-md rounded-2xl p-8 text-center max-w-lg mx-auto">
+        <i class="fa-regular fa-envelope-open text-pink-400 text-4xl mb-3"></i>
+        <p class="text-gray-500 italic text-lg">No notifications yet 💌</p>
+      </div>
+    {% endif %}
+  </main>
+</body>
+</html>

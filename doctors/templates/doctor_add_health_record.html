@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Health Record</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-pink-100 to-pink-200 min-h-screen font-sans">
+
+  <div class="ml-68 p-8 mt-10 max-w-3xl mx-auto">
+    
+    <!-- ✅ Back button -->
+    <a href="javascript:history.back()" 
+       class="inline-block mb-4 bg-gradient-to-r from-rose-400 to-pink-400 text-white rounded-xl hover:from-rose-500 hover:to-pink-500 px-4 py-2 rounded-lg transition">
+      ⬅️ Back to Previous Page
+    </a>
+
+    <!-- ✅ Title with Dr. prefix if doctor -->
+    <h1 class="text-3xl font-bold text-pink-600 text-center mb-6">
+      🩺 Add Health Record of 
+      {% if patient.user_type == "doctor" %}
+        Dr. {{ patient.name }}
+      {% else %}
+        {{ patient.name }}
+      {% endif %}
+    </h1>
+
+    <div class="bg-white shadow-lg rounded-2xl p-6 space-y-4">
+      <p class="text-gray-700"><strong>Patient Name:</strong> {{ patient.name }}</p>
+      <p class="text-gray-500 text-sm mb-4">Patient ID: {{ patient.id }}</p>
+
+      <h2 class="text-2xl font-bold text-pink-600 text-center mb-6">
+        {% if record %}✏️ Edit Health Record{% else %}➕ Add Health Record{% endif %}
+      </h2>
+
+      <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Diagnosis -->
+        <label for="diagnosis" class="block font-semibold">Diagnosis:</label>
+        <textarea name="diagnosis" id="diagnosis" rows="2" 
+                  class="border rounded-lg p-2 w-full mb-4">{{ record.diagnosis|default_if_none:"" }}</textarea>
+
+        <!-- Treatment -->
+        <label for="treatment" class="block font-semibold">Treatment:</label>
+        <textarea name="treatment" id="treatment" rows="2" 
+                  class="border rounded-lg p-2 w-full mb-4">{{ record.treatment|default_if_none:"" }}</textarea>
+
+        <!-- Notes -->
+        <label for="notes" class="block font-semibold">Notes:</label>
+        <textarea name="notes" id="notes" rows="3" 
+                  class="border rounded-lg p-2 w-full mb-4">{{ record.notes|default_if_none:"" }}</textarea>
+
+        <button type="submit" 
+                class="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition">
+          {% if record %}Update Record{% else %}Add Record{% endif %}
+        </button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

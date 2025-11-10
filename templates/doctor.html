@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Our Doctors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      .doctor-card {
+        transition: all 0.3s ease;
+      }
+      .doctor-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 10px 20px rgba(244, 114, 182, 0.2);
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 min-h-screen text-gray-700 font-sans"
+  >
+    {% include "nav.html" %}
+
+    <header class="mt-16 text-center py-10">
+      <h1 class="text-3xl font-bold text-pink-700 tracking-wide">
+        Our Doctors
+      </h1>
+      <p class="text-gray-500 mt-2 text-sm md:text-base">
+        Meet our experienced and compassionate medical professionals
+      </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-16">
+      {% if doctors %}
+      <div
+        class="doctor-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+      >
+        {% for doctor in doctors %}
+        <div
+          class="doctor-card bg-white rounded-3xl shadow-md overflow-hidden hover:shadow-xl transition text-center"
+        >
+          <!-- Doctor Image -->
+          <div class="relative">
+            <img 
+  src="{% if doctor.profile_pic %}
+          {{ doctor.profile_pic.url }}
+        {% elif doctor.gender|default:doctor.user.gender == 'Female' %}
+          {% static 'media/women.jpg' %}
+        {% elif doctor.gender|default:doctor.user.gender == 'Male' %}
+          {% static 'media/men.jpg' %}
+        {% else %}
+          {% static 'img/default-doctor.png' %}
+        {% endif %}" 
+  alt="{{ doctor.user.name }}"
+  class="w-full h-56 object-cover rounded-t-2xl border-b border-pink-100 transform hover:scale-105 transition duration-500 ease-in-out"
+/>
+
+            <div class="absolute bottom-0 left-0 right-0 h-16"></div>
+          </div>
+
+          <!-- Doctor Info -->
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-pink-700">
+              Dr. {{ doctor.user.name }}
+            </h3>
+            <p class="text-gray-600 text-sm mt-1">
+              <i class="fa-solid fa-stethoscope text-pink-400 mr-1"></i>
+              {{ doctor.specialization|default:"General Practitioner" }}
+            </p>
+
+            {% if doctor.highest_qualification %}
+            <p class="text-gray-500 text-sm mt-2">
+              <i class="fa-solid fa-graduation-cap text-pink-400 mr-1"></i>
+              {{ doctor.highest_qualification }}
+            </p>
+            {% endif %}
+
+            <p class="text-gray-500 text-sm mt-2">
+              <i class="fa-solid fa-briefcase-medical text-pink-400 mr-1"></i>
+              {{ doctor.experience_years }} years experience
+            </p>
+
+            <p class="text-gray-500 text-sm mt-2">
+              <i class="fa-solid fa-money-bill-wave text-pink-400 mr-1"></i>
+              Consultation  Fee:
+              <span class="font-medium text-pink-600"
+                >{{ doctor.visit_fee }} ৳</span
+              >
+            </p>
+
+            <!-- Button -->
+            <a
+              href="{% url 'book_appointment' doctor.id %}"
+              class="inline-flex items-center justify-center gap-2 mt-5 px-5 py-2.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white font-medium rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
+            >
+              <i class="fa-solid fa-calendar-check"></i> Book Appointment
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-center text-gray-500 text-lg mt-10">
+        No doctors available yet
+      </p>
+      {% endif %}
+    </main>
+
+    {% include "footer.html" %}
+  </body>
+</html>

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ambulance Services 🚑</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+  <style>
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 min-h-screen text-gray-700">
+
+  {% include "nav.html" %}
+
+  <!-- 🌸 Header -->
+  <header class="mt-16 text-center py-10">
+    <h1 class="text-3xl font-bold text-pink-700">🚑 Ambulance Services</h1>
+    <p class="text-gray-500 mt-2">Fast, safe, and reliable medical transport at your doorstep.</p>
+  </header>
+
+  <!-- 🌺 Main Section -->
+  <main class="max-w-7xl mx-auto px-6 pb-20 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+    <!-- 🚑 Card 1 -->
+    <div class="card bg-white rounded-2xl shadow-md overflow-hidden text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/12349/12349613.png" alt="Ambulance" class="w-full h-48 object-cover" />
+      <div class="p-5">
+        <h3 class="text-xl font-semibold text-pink-700">CityCare Ambulance</h3>
+        <p class="text-gray-500 text-sm mt-1">Basic Life Support</p>
+        <p class="text-gray-600 mt-2">📍 Dhanmondi, Dhaka</p>
+        <p class="text-sm text-gray-600">💸 50৳ / km</p>
+        <p class="mt-2"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Available</span></p>
+        <a href="tel:01712345678" class="inline-block mt-4 px-5 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition">
+          <i class="fa-solid fa-phone"></i> Call Now
+        </a>
+      </div>
+    </div>
+
+    <!-- 🚑 Card 2 -->
+    <div class="card bg-white rounded-2xl shadow-md overflow-hidden text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/2991/2991996.png" alt="Ambulance" class="w-full h-48 object-cover" />
+      <div class="p-5">
+        <h3 class="text-xl font-semibold text-pink-700">LifeLine Express</h3>
+        <p class="text-gray-500 text-sm mt-1">Advanced Life Support</p>
+        <p class="text-gray-600 mt-2">📍 Banani, Dhaka</p>
+        <p class="text-sm text-gray-600">💸 80৳ / km</p>
+        <p class="mt-2"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Available</span></p>
+        <a href="tel:01798765432" class="inline-block mt-4 px-5 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition">
+          <i class="fa-solid fa-phone"></i> Call Now
+        </a>
+      </div>
+    </div>
+
+    <!-- 🚑 Card 3 -->
+    <div class="card bg-white rounded-2xl shadow-md overflow-hidden text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/7693/7693096.png" alt="Ambulance" class="w-full h-48 object-cover" />
+      <div class="p-5">
+        <h3 class="text-xl font-semibold text-pink-700">RapidRescue</h3>
+        <p class="text-gray-500 text-sm mt-1">Patient Transport Service</p>
+        <p class="text-gray-600 mt-2">📍 Mirpur, Dhaka</p>
+        <p class="text-sm text-gray-600">💸 40৳ / km</p>
+        <p class="mt-2"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">Busy</span></p>
+        <a href="tel:01812398765" class="inline-block mt-4 px-5 py-2 bg-gray-400 text-white rounded-full cursor-not-allowed">
+          <i class="fa-solid fa-ban"></i> Not Available
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  {% include "footer.html" %}
+
+</body>
+</html>

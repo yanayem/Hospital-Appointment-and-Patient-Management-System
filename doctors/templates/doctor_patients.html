@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Patients</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+</head>
+
+<body class="bg-violet-50 min-h-screen flex flex-col md:flex-row font-sans">
+
+  <!-- Sidebar (already responsive) -->
+  <div class="w-full md:w-64 md:fixed">
+    {% include 'doctor_sidebar.html' %}
+  </div>
+
+  <!-- Main content -->
+  <main class="flex-1 p-6 md:p-8 md:ml-64 mt-16 md:mt-10">
+    <h2 class="text-2xl md:text-3xl font-bold text-violet-700 mb-6 text-center md:text-left">
+      💖 My Patients
+    </h2>
+
+    {% if patients %}
+      <!-- Responsive grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for p in patients %}
+          <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition transform hover:scale-[1.02]">
+            <div class="flex flex-col space-y-1">
+              <h3 class="text-lg md:text-xl font-semibold text-violet-600">{{ p.name }}</h3>
+              <p class="text-gray-600 text-sm break-all">{{ p.email }}</p>
+              <p class="text-gray-500 text-sm">{{ p.phone }}</p>
+            </div>
+
+            <div class="mt-4 text-right">
+              <a href="{% url 'patient_history' p.id %}" 
+                 class="bg-violet-600 hover:bg-violet-700 text-white text-sm md:text-base px-3 md:px-4 py-2 rounded-lg transition">
+                📖 View History
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-gray-500 italic text-center md:text-left mt-10">No confirmed or completed patients yet 🌸</p>
+    {% endif %}
+  </main>
+</body>
+</html>

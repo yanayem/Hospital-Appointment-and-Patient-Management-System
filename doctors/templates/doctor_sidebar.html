@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Sidebar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #fff0f5, #fef6f9, #fdf4ff);
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #fbb6ce 0%, #fcd5e4 50%, #fde7ef 100%);
+      box-shadow: 4px 0 20px rgba(255, 192, 203, 0.25);
+      border-right: 2px solid rgba(255, 182, 193, 0.3);
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* ✨ Hover lift */
+    .nav-item {
+      transition: all 0.25s ease-in-out;
+      color: #444;
+    }
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.6);
+      transform: translateX(6px);
+      color: #db2777;
+    }
+
+    /* Active link */
+    .active-link {
+      background: rgba(255, 255, 255, 0.5);
+      border-right: 4px solid #f472b6;
+      color: #a21caf !important;
+      font-weight: 600;
+    }
+
+  
+
+  </style>
+</head>
+
+<body class="min-h-screen">
+
+  <!-- 🌸 Mobile Header -->
+  <header class="lg:hidden fixed top-0 left-0 w-full flex items-center justify-between bg-rose-100 text-white px-5 py-4 shadow-md z-50">
+    <div class="text-xl font-bold tracking-wide">
+      🏥 <span class="text-rose-600">Hospital</span><span class="text-rose-800"> System</span>
+    </div>
+    <button id="menuBtn" class="text-rose-700 text-2xl">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </header>
+
+  <div class="h-16 lg:hidden"></div>
+
+  <!-- 🌈 Sidebar -->
+  <aside id="sidebar"
+         class="sidebar fixed top-0 left-0 h-full w-64 text-gray-700 flex flex-col justify-between shadow-2xl rounded-r-3xl transform -translate-x-full lg:translate-x-0 transition-all duration-300 z-40">
+
+    <div class="hidden lg:block text-center font-bold text-2xl py-6 border-b border-white/30 shadow-sm tracking-wide">
+      🏥 <span class="text-rose-600">Hospital</span><span class="text-rose-800"> System</span>
+    </div>
+
+    <ul class="mt-20 lg:mt-6 space-y-2 px-3 overflow-y-auto">
+      <li>
+        <a href="{% url 'doctor_dashboard' %}" 
+           class="flex items-center gap-3 px-5 py-3 rounded-xl nav-item {% if request.resolver_match.url_name == 'doctor_dashboard' %}active-link{% endif %}">
+          <i class="fa-solid fa-chart-line text-rose-500"></i> Dashboard
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'doctor_appointments' %}" 
+           class="flex items-center gap-3 px-5 py-3 rounded-xl nav-item {% if request.resolver_match.url_name == 'doctor_appointments' %}active-link{% endif %}">
+          <i class="fa-solid fa-calendar-check text-rose-500"></i> Appointments
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'doctor_patients' %}" 
+           class="flex items-center gap-3 px-5 py-3 rounded-xl nav-item {% if request.resolver_match.url_name == 'doctor_patients' %}active-link{% endif %}">
+          <i class="fa-solid fa-user-group text-rose-500"></i> Patients
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'doctor_health_records' %}" 
+           class="flex items-center gap-3 px-5 py-3 rounded-xl nav-item {% if request.resolver_match.url_name == 'doctor_health_records' %}active-link{% endif %}">
+          <i class="fa-solid fa-file-medical text-rose-500"></i> Health Records
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'doctor_addnotes' %}" 
+           class="flex items-center gap-3 px-5 py-3 rounded-xl nav-item {% if request.resolver_match.url_name == 'doctor_addnotes' %}active-link{% endif %}">
+          <i class="fa-solid fa-pen-to-square text-rose-500"></i> Add Notes
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'doctor_notifications' %}" 
+           class="flex items-center gap-3 px-5 py-3 rounded-xl nav-item {% if request.resolver_match.url_name == 'doctor_notifications' %}active-link{% endif %}">
+          <span><i class="fa-solid fa-bell text-rose-500 mr-2"></i> Notifications</span>
+          {% if unread_count > 0 %}
+          <span class="bg-rose-500 text-white text-xs px-2 py-1 rounded-full shadow">{{ unread_count }}</span>
+          {% endif %}
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'doctor_profile' %}" 
+           class="flex items-center gap-3 px-5 py-3 rounded-xl nav-item {% if request.resolver_match.url_name == 'doctor_profile' %}active-link{% endif %}">
+          <i class="fa-solid fa-user text-rose-500"></i> Profile
+        </a>
+      </li>
+    </ul>
+
+    <div class="text-center border-t border-rose-200 py-4 mt-auto">
+      <p class="font-semibold text-rose-700">Welcome 💐 Dr. {{ doctor.name|default:"Lovely You" }}</p>
+      <form method="POST" action="{% url 'logout' %}" class="mx-5 mt-3">
+        {% csrf_token %}
+        <button type="submit" class="w-full py-2 bg-gradient-to-r from-rose-400 to-pink-400 text-white rounded-xl hover:from-rose-500 hover:to-pink-500 transition-all duration-300 shadow-md flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-30 lg:hidden"></div>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    menuBtn?.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+
+    overlay?.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+  </script>
+
+</body>
+</html>

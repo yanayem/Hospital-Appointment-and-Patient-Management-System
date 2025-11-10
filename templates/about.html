@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - HealthCare+ Hospital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+
+  <body class="bg-pink-50 text-gray-800 font-poppins">
+    {% include "nav.html" %}
+
+    <!-- 🌸 Hero Section -->
+    <header
+      class="bg-gradient-to-r from-rose-300 to-rose-400 text-white text-center pt-24 pb-16 shadow-md"
+    >
+      <h1 class="text-4xl font-bold mb-3 tracking-wide">About Us</h1>
+      <p class="text-lg opacity-90">Caring with Compassion & Innovation</p>
+    </header>
+
+    <!-- 🌿 Welcome Section -->
+    <section
+      class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10 items-center"
+    >
+      <div>
+        <h2 class="text-3xl font-semibold text-rose-600 mb-4">
+          Welcome to HealthCare+
+        </h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          We provide modern healthcare solutions that combine compassion,
+          innovation, and medical excellence. Our goal is to ensure every
+          patient receives personalized attention and world-class treatment.
+        </p>
+      </div>
+
+      <!-- Controlled hospital image -->
+      <div class="flex justify-center">
+        <img
+          src="{% static 'media/hospital.jpg' %}"
+          alt="Hospital"
+          class="w-full max-w-md h-80 object-cover rounded-2xl shadow-lg hover:scale-105 transition duration-500"
+        />
+      </div>
+    </section>
+
+    <!-- 🏥 Mission Section -->
+    <section
+      class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-10 items-center"
+    >
+      <div class="flex justify-center">
+        <img
+          src="{% static 'media/aboutus.jpg' %}"
+          alt="About Us"
+          class="w-full max-w-md h-80 object-cover rounded-2xl shadow-lg hover:scale-105 transition duration-500"
+        />
+      </div>
+      <div>
+        <h2 class="text-3xl font-semibold text-rose-600 mb-4">Our Mission</h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          For over two decades, HealthCare+ has been a leader in medical
+          innovation and patient care. From routine checkups to advanced
+          surgeries, we bring together technology, compassion, and excellence
+          under one roof.
+        </p>
+      </div>
+    </section>
+
+    <!-- 📞 Contact Section -->
+    <section class="bg-white py-16 text-center shadow-inner">
+      <h2 class="text-3xl font-semibold text-rose-600 mb-6">Contact Us</h2>
+      <div class="text-lg text-gray-700 space-y-2">
+        <p>
+          <i class="fa-solid fa-envelope text-rose-500 mr-2"></i>
+          info@healthcareplus.com
+        </p>
+        <p>
+          <i class="fa-solid fa-phone text-rose-500 mr-2"></i>
+          +123 456 7890
+        </p>
+        <p>
+          <i class="fa-solid fa-location-dot text-rose-500 mr-2"></i>
+          123 Main Street, City, Country
+        </p>
+      </div>
+    </section>
+
+    <!-- 👩‍💻 Developer Team -->
+    <section class="py-20 bg-gradient-to-b from-rose-50 to-pink-100">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-semibold text-rose-600 mb-3">
+          Our Development Team
+        </h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Meet the creative and technical team behind HealthCare+, dedicated to
+          making digital healthcare smarter and more human.
+        </p>
+      </div>
+
+      <div
+        class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-10 px-6"
+      >
+        <!-- Eva -->
+        <div
+          class="bg-white p-6 rounded-2xl shadow-md text-center hover:shadow-xl hover:scale-105 transition"
+        >
+          <img
+            src="{% static 'media/eva.jpeg' %}"
+            alt="Sayma Akter Eva"
+            class="w-36 h-36 mx-auto rounded-full mb-4 object-cover object-center border-4 border-rose-100 shadow-md"
+          />
+          <h3 class="text-xl font-semibold text-rose-600">Sayma Akter Eva</h3>
+          <p class="text-gray-600 mb-3">Backend Developer</p>
+          <div class="flex justify-center space-x-4 text-rose-500">
+            <a href="#"><i class="fab fa-instagram hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-facebook hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-linkedin hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-github hover:text-rose-400"></i></a>
+          </div>
+        </div>
+
+        <!-- Prottasa -->
+        <div
+          class="bg-white p-6 rounded-2xl shadow-md text-center hover:shadow-xl hover:scale-105 transition"
+        >
+          <img
+            src="{% static 'media/prottu.jpeg' %}"
+            alt="Taspiya Jannat Prottasa"
+            class="w-36 h-36 mx-auto rounded-full mb-4 object-cover object-center border-4 border-rose-100 shadow-md"
+          />
+          <h3 class="text-xl font-semibold text-rose-600">
+            Taspiya Jannat Prottasa
+          </h3>
+          <p class="text-gray-600 mb-3">Frontend Developer</p>
+          <div class="flex justify-center space-x-4 text-rose-500">
+            <a href="#"><i class="fab fa-instagram hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-facebook hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-linkedin hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-github hover:text-rose-400"></i></a>
+          </div>
+        </div>
+
+        <!-- Maria -->
+        <div
+          class="bg-white p-6 rounded-2xl shadow-md text-center hover:shadow-xl hover:scale-105 transition"
+        >
+          <img
+            src="{% static 'media/maria.jpeg' %}"
+            alt="Tasnim Sultana Maria"
+            class="w-36 h-36 mx-auto rounded-full mb-4 object-cover object-center border-4 border-rose-100 shadow-md"
+          />
+          <h3 class="text-xl font-semibold text-rose-600">Tasnim Sultana Maria</h3>
+          <p class="text-gray-600 mb-3">Data Analyst</p>
+          <div class="flex justify-center space-x-4 text-rose-500">
+            <a href="#"><i class="fab fa-instagram hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-facebook hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-linkedin hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-github hover:text-rose-400"></i></a>
+          </div>
+        </div>
+
+        <!-- Nabiha -->
+        <div
+          class="bg-white p-6 rounded-2xl shadow-md text-center hover:shadow-xl hover:scale-105 transition"
+        >
+          <img
+            src="{% static 'media/nabiha.jpeg' %}"
+            alt="Nabiha Naz"
+            class="w-36 h-36 mx-auto rounded-full mb-4 object-cover object-center border-4 border-rose-100 shadow-md"
+          />
+          <h3 class="text-xl font-semibold text-rose-600">Nabiha Naz</h3>
+          <p class="text-gray-600 mb-3">Frontend Developer</p>
+          <div class="flex justify-center space-x-4 text-rose-500">
+            <a href="#"><i class="fab fa-instagram hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-facebook hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-linkedin hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-github hover:text-rose-400"></i></a>
+          </div>
+        </div>
+
+        <!-- Taha -->
+        <div
+          class="bg-white p-6 rounded-2xl shadow-md text-center hover:shadow-xl hover:scale-105 transition"
+        >
+          <img
+            src="{% static 'media/taha.jpg' %}"
+            alt="Tasnuba Tarannum"
+            class="w-36 h-36 mx-auto rounded-full mb-4 object-cover object-center border-4 border-rose-100 shadow-md"
+          />
+          <h3 class="text-xl font-semibold text-rose-600">Tasnuba Tarannum</h3>
+          <p class="text-gray-600 mb-3">Backend Developer</p>
+          <div class="flex justify-center space-x-4 text-rose-500">
+            <a href="#"><i class="fab fa-instagram hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-facebook hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-linkedin hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-github hover:text-rose-400"></i></a>
+          </div>
+        </div>
+
+        <!-- Nirala -->
+        <div
+          class="bg-white p-6 rounded-2xl shadow-md text-center hover:shadow-xl hover:scale-105 transition"
+        >
+          <img
+            src="{% static 'media/nirala.jpeg' %}"
+            alt="Khurshid Jahan Nirala"
+            class="w-36 h-36 mx-auto rounded-full mb-4 object-cover object-center border-4 border-rose-100 shadow-md"
+          />
+          <h3 class="text-xl font-semibold text-rose-600">Khurshid Jahan Nirala</h3>
+          <p class="text-gray-600 mb-3">UI/UX Designer</p>
+          <div class="flex justify-center space-x-4 text-rose-500">
+            <a href="#"><i class="fab fa-instagram hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-facebook hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-linkedin hover:text-rose-400"></i></a>
+            <a href="#"><i class="fab fa-github hover:text-rose-400"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% include "footer.html" %}
+  </body>
+</html>

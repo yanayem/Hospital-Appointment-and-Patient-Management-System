@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Footer 🌸</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+
+  <body class="bg-pink-50">
+    <!-- 🌸 Footer Section -->
+    <footer class="bg-gradient-to-r from-pink-100 via-pink-50 to-pink-100 py-12 text-gray-700 border-t border-pink-200">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+          
+          <!-- 🌿 Hospital Info -->
+          <div>
+            <h2 class="text-2xl font-bold text-pink-700 mb-3">Medicare Hospital</h2>
+            <p class="text-sm text-gray-600 mb-4">
+              Providing compassionate and comprehensive healthcare for every
+              patient with world-class medical expertise and modern facilities.
+            </p>
+            <div class="flex space-x-4 text-pink-600 text-xl">
+              <a href="#" class="hover:text-pink-800"><i class="fab fa-facebook"></i></a>
+              <a href="#" class="hover:text-pink-800"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="hover:text-pink-800"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="hover:text-pink-800"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+
+          <!-- 🩺 About -->
+          <div>
+            <h3 class="text-lg font-semibold text-pink-700 mb-3">About</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="hover:text-pink-600 transition">Our Story</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Our Doctors</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Careers</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">News & Events</a></li>
+            </ul>
+          </div>
+
+          <!-- 💗 Departments -->
+          <div>
+            <h3 class="text-lg font-semibold text-pink-700 mb-3">Departments</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="hover:text-pink-600 transition">Cardiology</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Neurology</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Pediatrics</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Orthopedics</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Emergency Care</a></li>
+            </ul>
+          </div>
+
+          <!-- 💬 Patient Resources -->
+          <div>
+            <h3 class="text-lg font-semibold text-pink-700 mb-3">Patient Resources</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="hover:text-pink-600 transition">Book Appointment</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Patient Portal</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Insurance Info</a></li>
+              <li><a href="#" class="hover:text-pink-600 transition">Billing & Payment</a></li>
+            </ul>
+          </div>
+
+          <!-- 📞 Contact -->
+          <div>
+            <h3 class="text-lg font-semibold text-pink-700 mb-3">Contact</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li><i class="fas fa-phone text-pink-500 mr-2"></i> +880 123 456 789</li>
+              <li><i class="fas fa-envelope text-pink-500 mr-2"></i> info@medicare.com</li>
+              <li><i class="fas fa-map-marker-alt text-pink-500 mr-2"></i> 123 Health Street, Dhaka</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- 🌷 Divider -->
+        <div class="border-t border-pink-200 mt-10 pt-6 text-center text-sm text-gray-500">
+          <p>© 2025 Medicare Hospital. All rights reserved.</p>
+          <p class="mt-1">Developed with ❤️ by Smart Tech</p>
+        </div>
+      </div>
+
+      <!-- 🔝 Back to Top Button -->
+      <button id="backToTop" class="hidden fixed bottom-6 right-6 bg-pink-500 text-white p-3 rounded-full shadow-lg hover:bg-pink-600 transition">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+    </footer>
+
+    <script>
+      const backToTop = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        backToTop.classList.toggle("hidden", window.scrollY < 300);
+      });
+      backToTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
+  </body>
+</html>

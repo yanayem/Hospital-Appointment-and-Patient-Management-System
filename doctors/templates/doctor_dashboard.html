@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .glow {
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.25);
+      transition: all 0.3s ease;
+    }
+    .glow:hover {
+      box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-pink-50 via-rose-100 to-violet-100 min-h-screen flex flex-col md:flex-row">
+
+   {% include 'doctor_sidebar.html' %}
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 p-4 sm:p-6 md:ml-64 mt-4 md:mt-0 transition-all duration-300">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-violet-600">
+          Welcome, Dr. {{ doctor.name }}
+        </h1>
+        <p class="text-gray-500 text-sm sm:text-base">Spreading love & care through healing ✨</p>
+      </div>
+      <a href="{% url 'switch_to_patient' %}" 
+         class="bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold px-4 py-2 rounded-full shadow-md hover:scale-105 transition lg:text-lg text-base">
+         🔄 Switch View
+      </a>
+    </div>
+
+    <!-- STATS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
+      <div class="bg-white p-5 rounded-2xl glow text-center">
+        <p class="text-xs sm:text-sm text-pink-400 font-semibold uppercase">Upcoming</p>
+        <p class="text-2xl sm:text-3xl font-bold text-violet-700">{{ upcoming_appointments|length }}</p>
+        <p class="text-gray-400 text-xs sm:text-sm">Appointments</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl glow text-center">
+        <p class="text-xs sm:text-sm text-violet-400 font-semibold uppercase">Completed</p>
+        <p class="text-2xl sm:text-3xl font-bold text-violet-700">{{ recent_histories|length }}</p>
+        <p class="text-gray-400 text-xs sm:text-sm">Histories</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl glow text-center relative">
+        <p class="text-xs sm:text-sm text-rose-400 font-semibold uppercase">Notifications</p>
+        <p class="text-2xl sm:text-3xl font-bold text-violet-700">{{ notifications|length }}</p>
+        <p class="text-gray-400 text-xs sm:text-sm">Recent alerts</p>
+        {% if unread_count > 0 %}
+        <span class="absolute top-3 right-6 bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full">
+          {{ unread_count }} new
+        </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- TODAY'S APPOINTMENTS -->
+    <div class="bg-white rounded-2xl glow p-4 sm:p-6 mb-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">🌸 Today's Appointments</h2>
+      {% if todays_appointments %}
+      <ul class="divide-y divide-pink-50">
+        {% for appt in todays_appointments %}
+        <li class="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+          <div>
+            <p class="text-sm font-semibold text-violet-700">{{ appt.patient.name }}</p>
+            <p class="text-xs text-gray-500">{{ appt.time }} — {{ appt.service|default:"General Checkup" }}</p>
+          </div>
+          <span class="px-3 py-1 text-xs rounded-full self-start sm:self-auto
+            {% if appt.status == 'Confirmed' %}bg-green-100 text-green-600
+            {% elif appt.status == 'Pending' %}bg-yellow-50 text-yellow-700
+            {% elif appt.status == 'Cancelled' %}bg-rose-50 text-rose-600
+            {% else %}bg-blue-50 text-blue-600{% endif %}">
+            {{ appt.status }}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-gray-400 text-sm italic">No appointments today 💕</p>
+      {% endif %}
+    </div>
+
+    <!-- UPCOMING APPOINTMENTS -->
+    <div class="bg-white rounded-2xl glow p-4 sm:p-6 mb-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">📅 Upcoming Appointments</h2>
+      {% if upcoming_appointments %}
+      <ul class="divide-y divide-pink-50">
+        {% for appt in upcoming_appointments %}
+        <li class="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+          <div>
+            <p class="text-sm font-semibold text-violet-700">{{ appt.patient.name }}</p>
+            <p class="text-xs text-gray-500">{{ appt.date }} @ {{ appt.time }}</p>
+            <p class="text-xs text-gray-400">Service: {{ appt.service|default:"General Checkup" }}</p>
+          </div>
+          <span class="px-3 py-1 text-xs rounded-full self-start sm:self-auto
+            {% if appt.status == 'Confirmed' %}bg-green-100 text-green-600
+            {% elif appt.status == 'Pending' %}bg-yellow-50 text-yellow-700
+            {% elif appt.status == 'Cancelled' %}bg-rose-50 text-rose-600
+            {% else %}bg-blue-50 text-blue-600{% endif %}">
+            {{ appt.status }}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-gray-400 text-sm italic">No upcoming appointments 💖</p>
+      {% endif %}
+    </div>
+
+    <!-- NOTES -->
+    <div class="bg-white rounded-2xl glow p-4 sm:p-6 mb-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">📝 Your Recent Notes</h2>
+      {% if notes %}
+      <ul class="divide-y divide-pink-50">
+        {% for n in notes %}
+        <li class="py-3">
+          <p class="text-sm text-gray-700">{{ n.note|truncatechars:80 }}</p>
+          <p class="text-xs text-gray-400 mt-1">{{ n.created_at|date:"M d, Y - H:i" }} ({{ n.patient.name }})</p>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-gray-400 text-sm italic">No notes yet 💌</p>
+      {% endif %}
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="bg-white rounded-2xl glow p-4 sm:p-6">
+      <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">🔔 Notifications</h2>
+      {% if notifications %}
+      <ul class="divide-y divide-pink-50">
+        {% for n in notifications|slice:":5" %}
+        <li class="py-3">
+          <p class="text-sm text-gray-700">{{ n.message }}</p>
+          <p class="text-xs text-gray-400 mt-1">{{ n.created_at|date:"M d, Y - H:i" }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-gray-400 text-sm italic">No notifications 💫</p>
+      {% endif %}
+    </div>
+
+    <footer class="text-center mt-10 text-xs text-gray-400">
+      Made with {Developer Name}
+    </footer>
+  </main>
+
+  <!-- JS: Mobile Sidebar Toggle -->
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const sidebar = document.getElementById("sidebar");
+    let open = false;
+
+    menuBtn?.addEventListener("click", () => {
+      open = !open;
+      sidebar.classList.toggle("hidden", !open);
+      sidebar.classList.toggle("absolute", open);
+      sidebar.classList.toggle("top-0", open);
+      sidebar.classList.toggle("left-0", open);
+      sidebar.classList.toggle("w-3/4", open);
+      sidebar.classList.toggle("h-screen", open);
+      sidebar.classList.toggle("shadow-lg", open);
+      sidebar.classList.toggle("z-50", open);
+    });
+  </script>
+</body>
+</html>

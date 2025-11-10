@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prescription History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-pink-100 to-pink-200 font-sans min-h-screen">
+
+  {% include "patient_sidebar.html" %}
+
+  <div class="max-w-5xl mx-auto mt-10 p-6">
+
+    <h1 class="text-3xl font-bold text-pink-600 mb-6">💊 Prescription History</h1>
+
+    {% if messages %}
+      <div class="space-y-2 mb-4">
+        {% for message in messages %}
+          <div class="bg-green-100 text-green-700 px-4 py-2 rounded-lg shadow animate__animated animate__fadeIn">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if prescriptions %}
+      <div class="space-y-4">
+        {% for pres in prescriptions %}
+          <div class="bg-white shadow-lg rounded-2xl p-5 transition transform hover:scale-105">
+            <div class="flex justify-between items-center mb-3">
+              <h2 class="text-xl font-semibold text-pink-600">Dr. {{ pres.doctor.name|default:"Unknown" }}</h2>
+              <span class="text-gray-500 text-sm">{{ pres.date }}</span>
+            </div>
+            <p class="text-gray-700"><strong>Diagnosis:</strong> {{ pres.diagnosis }}</p>
+            <p class="text-gray-700"><strong>Treatment:</strong> {{ pres.treatment }}</p>
+            <p class="text-gray-700"><strong>Notes:</strong> {{ pres.notes }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-gray-600 text-center mt-6">You have no prescriptions yet. 💖</p>
+    {% endif %}
+
+  </div>
+
+</body>
+</html>

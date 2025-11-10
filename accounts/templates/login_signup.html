@@ -1,0 +1,515 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login · Sign up</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts & Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --pookie-rose: #ffb3d6;
+        --pookie-pink: #ffd9ec;
+        --pookie-soft: #fff7fb;
+      }
+
+      body {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 211, 234, 0.95),
+            rgba(250, 236, 255, 0.95)
+          ),
+          url('{% static "media/bg-subtle.png" %}');
+        background-size: cover;
+        background-attachment: fixed;
+        font-family: "Poppins", sans-serif;
+      }
+
+      /* flip card setup */
+      .card-3d {
+        perspective: 1200px;
+      }
+      .backface-hidden {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+      #card {
+        transform-style: preserve-3d;
+        transition: transform 0.8s ease-in-out;
+        position: relative;
+        box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3);
+      }
+      #front,
+      #back {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+      .rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+
+      input:focus {
+        box-shadow: 0 0 8px rgba(255, 182, 193, 0.4);
+        border-color: #fda4af;
+      }
+      @keyframes fadeInDown {
+        0% {
+          transform: translateY(-10px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      #message-container div {
+        animation: fadeInDown 0.4s ease-out;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col items-center justify-start relative">
+    <!-- Top Logo -->
+    <header class="flex flex-col items-center mb-4 mt-16">
+      <a
+        href="{% url 'homepage' %}"
+        class="flex items-center gap-3 hover:opacity-80 transition"
+      >
+        <img
+          src="{% static 'media/logo.png' %}"
+          alt="Health Logo"
+          class="w-12 h-12 rounded-full shadow-md"
+        />
+        <span class="text-3xl font-semibold text-rose-700"
+          >General Hospital Management</span
+        >
+      </a>
+
+      <!-- Django Messages under logo -->
+      {% if messages %}
+      <div
+        id="message-container"
+        class="mt-4 space-y-2 w-full flex flex-col items-center"
+      >
+        {% for message in messages %}
+        <div
+          class="px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium max-w-sm w-fit {% if message.tags == 'error' %} bg-rose-500 {% elif message.tags == 'success' %} bg-pink-400 {% elif message.tags == 'info' %} bg-rose-300 {% else %} bg-gray-400 {% endif %} animate-fadeInDown"
+        >
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </header>
+
+    <main
+      id="main-wrapper"
+      class="max-w-6xl w-full px-6 py-8 grid md:grid-cols-2 gap-6 items-stretch transition-all duration-500"
+    >
+      <!-- Welcome section -->
+      <section
+        id="welcome-section"
+        class="hidden md:flex flex-col justify-center text-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-lg p-10 border border-white/60 transition-all duration-500"
+      >
+        <div
+          class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-rose-300 to-pink-200 flex items-center justify-center shadow-lg"
+        >
+          <i class="fa-solid fa-heart-pulse text-white text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-semibold text-rose-700 mb-3">
+          Welcome to General Hospital Management ❤️
+        </h1>
+        <p class="text-gray-600 text-sm mb-4">
+          Your friendly companion for better health and wellness.<br />
+          Join as a <span class="text-rose-600 font-semibold">Patient</span> or
+          <span class="text-pink-600 font-semibold">Doctor</span>.
+        </p>
+        <p class="text-xs text-gray-500 italic">
+          “Health is happiness, and we’re here for both.”
+        </p>
+      </section>
+
+      <!-- Form card -->
+      <section
+        class="card-3d relative w-full transition-all duration-500"
+        id="form-section"
+      >
+        <div id="card" class="relative w-full h-full">
+          <!-- Login front -->
+          <div id="front" class="backface-hidden z-10">
+            <div
+              class="bg-white/70 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/60 h-full flex flex-col justify-center"
+            >
+              <div class="mb-6 text-center">
+                <h2 class="text-2xl font-semibold text-rose-600">
+                  Welcome back ♥
+                </h2>
+                <p class="text-gray-600 text-sm mt-1">
+                  Log in to access your dashboard
+                </p>
+              </div>
+
+              <form
+                method="POST"
+                action="{% url 'LogInSignUppage' %}"
+                class="space-y-4"
+              >
+                {% csrf_token %}
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Email"
+                  class="w-full rounded-xl p-3 border border-pink-200 bg-white/80 focus:outline-none"
+                />
+
+                <div class="relative">
+                  <input
+                    id="login-password"
+                    name="password"
+                    type="password"
+                    required
+                    placeholder="Password"
+                    class="w-full rounded-xl p-3 border border-pink-200 bg-white/80 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-3 text-gray-400"
+                    onclick="togglePassword('login-password','login-eye')"
+                  >
+                    <i id="login-eye" class="fa fa-eye"></i>
+                  </button>
+                </div>
+
+                <button
+                  type="submit"
+                  name="login"
+                  class="w-full py-3 rounded-xl bg-gradient-to-r from-rose-400 to-pink-300 text-white font-semibold shadow hover:from-rose-500"
+                >
+                  Login
+                </button>
+
+                <p class="text-center text-base text-gray-600">
+                Have a  No account yet?
+                  <button
+                    type="button"
+                    onclick="flipCardToBack()"
+                    class="text-rose-600 underline font-medium"
+                  >
+                    Sign up
+                  </button>
+                </p>
+              </form>
+            </div>
+          </div>
+
+          <!-- Sign up back -->
+          <div id="back" class="backface-hidden rotate-y-180">
+            <div
+              class="bg-white/70 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/60 h-full flex flex-col justify-center"
+            >
+              <div class="text-center mb-6">
+                <h2 class="text-2xl font-semibold text-rose-600">
+                  Create your account ✨
+                </h2>
+                <p class="text-gray-600 text-base mt-1">
+                  Join as a patient or doctor
+                </p>
+              </div>
+
+              <!-- Choose -->
+              <div id="choosePanel" class="space-y-4 text-center">
+                <p class="text-base text-gray-600">Select account type</p>
+                <div class="flex gap-3">
+                  <button
+                    type="button"
+                    onclick="showPanel('patient')"
+                    class="flex-1 py-3 rounded-xl border border-rose-100 bg-gradient-to-r from-rose-200 to-pink-200 text-rose-700 font-semibold shadow"
+                  >
+                    Patient
+                  </button>
+                  <button
+                    type="button"
+                    onclick="showPanel('doctor')"
+                    class="flex-1 py-3 rounded-xl border border-rose-100 text-rose-700 bg-gradient-to-r from-pink-300 to-rose-200 font-semibold shadow"
+                  >
+                    Doctor
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onclick="flipCardToFront()"
+                  class="text-base text-gray-500 underline"
+                >
+                  Back to Login
+                </button>
+              </div>
+
+              <!-- Patient form -->
+              <form
+                id="patientPanel"
+                method="POST"
+                action="{% url 'LogInSignUppage' %}"
+                class="hidden space-y-3"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="user_type" value="patient" />
+                <input
+                  name="name"
+                  placeholder="Full name"
+                  class="w-full rounded-xl p-3 border border-pink-200 hover:border-pink-200 focus:ring-0  bg-white/70"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+                <input
+                  name="phone"
+                  placeholder="Phone"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+                <input
+                  type="number"
+                  name="age"
+                  placeholder="Age"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+
+                <div class="relative">
+                  <input
+                    id="patient-password"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-3 text-gray-400"
+                    onclick="togglePassword('patient-password','patient-eye')"
+                  >
+                    <i id="patient-eye" class="fa fa-eye"></i>
+                  </button>
+                </div>
+
+                <div class="relative">
+                  <input
+                    id="patient-confirm-password"
+                    name="confirm_password"
+                    type="password"
+                    placeholder="Confirm Password"
+                    class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-3 text-gray-400"
+                    onclick="togglePassword('patient-confirm-password','patient-confirm-eye')"
+                  >
+                    <i id="patient-confirm-eye" class="fa fa-eye"></i>
+                  </button>
+                </div>
+
+                <input
+                  name="address"
+                  placeholder="Address"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+
+                <div class="flex gap-3">
+                  <button
+                    type="submit"
+                    name="signup"
+                    class="flex-1 py-3 rounded-xl bg-gradient-to-r from-rose-400 to-pink-300 text-white font-semibold shadow hover:bg-gradient-to-r hover:from-rose-500 hover:to-rose-200"
+                  >
+                    Register as Patient
+                  </button>
+                  <button
+                    type="button"
+                    onclick="showPanel('choose')"
+                    class="px-4 py-3 rounded-xl border border-rose-100 bg-white/60 text-rose-700"
+                  >
+                    Back
+                  </button>
+                </div>
+              </form>
+
+              <!-- Doctor form -->
+              <form
+                id="doctorPanel"
+                method="POST"
+                action="{% url 'LogInSignUppage' %}"
+                class="hidden space-y-3"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="user_type" value="doctor" />
+                <input
+                  name="name"
+                  placeholder="Full name"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+                <input
+                  name="phone"
+                  placeholder="Phone"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+                <input
+                  name="specialization"
+                  placeholder="Specialization"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+
+                <div class="relative">
+                  <input
+                    id="doctor-password"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-3 text-gray-400"
+                    onclick="togglePassword('doctor-password','doctor-eye')"
+                  >
+                    <i id="doctor-eye" class="fa fa-eye"></i>
+                  </button>
+                </div>
+
+                <div class="relative">
+                  <input
+                    id="doctor-confirm-password"
+                    name="confirm_password"
+                    type="password"
+                    placeholder="Confirm Password"
+                    class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-3 text-gray-400"
+                    onclick="togglePassword('doctor-confirm-password','doctor-confirm-eye')"
+                  >
+                    <i id="doctor-confirm-eye" class="fa fa-eye"></i>
+                  </button>
+                </div>
+
+                <input
+                  name="license"
+                  placeholder="License number"
+                  class="w-full rounded-xl p-3 border border-pink-100 bg-white/80"
+                />
+
+                <div class="flex gap-3">
+                  <button
+                    type="submit"
+                    name="signup"
+                    class="flex-1 py-3 rounded-xl bg-gradient-to-r from-rose-400 to-pink-300 text-white font-semibold shadow hover:from-rose-500"
+                  >
+                    Register as Doctor
+                  </button>
+                  <button
+                    type="button"
+                    onclick="showPanel('choose')"
+                    class="px-4 py-3 rounded-xl border border-rose-100 bg-white/60 text-rose-700"
+                  >
+                    Back
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- JS -->
+    <script>
+      const cardEl = document.getElementById("card");
+      const front = document.getElementById("front");
+      const back = document.getElementById("back");
+      const choosePanel = document.getElementById("choosePanel");
+      const patientPanel = document.getElementById("patientPanel");
+      const doctorPanel = document.getElementById("doctorPanel");
+      const welcomeSection = document.getElementById("welcome-section");
+      const mainWrapper = document.getElementById("main-wrapper");
+
+      function flipCardToBack() {
+        cardEl.classList.add("rotate-y-180");
+        back.style.display = "block";
+        front.style.display = "none";
+        showPanel("choose");
+      }
+
+      function flipCardToFront() {
+        cardEl.classList.remove("rotate-y-180");
+        front.style.display = "block";
+        back.style.display = "none";
+        welcomeSection.classList.remove("hidden");
+        mainWrapper.classList.remove("grid-cols-1");
+      }
+
+      function showPanel(name) {
+        choosePanel.classList.add("hidden");
+        patientPanel.classList.add("hidden");
+        doctorPanel.classList.add("hidden");
+
+        if (name === "choose") {
+          choosePanel.classList.remove("hidden");
+          welcomeSection.classList.remove("hidden");
+          mainWrapper.classList.remove("grid-cols-1");
+        } else {
+          document.getElementById(name + "Panel").classList.remove("hidden");
+          welcomeSection.classList.add("hidden");
+          mainWrapper.classList.add("grid-cols-1");
+        }
+      }
+
+      function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        input.type = input.type === "password" ? "text" : "password";
+        icon.classList.toggle("fa-eye");
+        icon.classList.toggle("fa-eye-slash");
+      }
+
+      window.addEventListener("load", () => {
+        // শুধুমাত্র তখনই চলবে যখন user login mode এ থাকবে
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("mode") === "login") {
+          flipCardToFront();
+        }
+      });
+      // Auto hide Django messages after 3.5 seconds
+setTimeout(() => {
+  const messages = document.querySelectorAll("#message-container div");
+  messages.forEach(msg => {
+    msg.style.transition = "opacity 0.8s ease";
+    msg.style.opacity = "0";
+    setTimeout(() => msg.remove(), 800);
+  });
+}, 3500);
+
+    </script>
+  </body>
+</html>

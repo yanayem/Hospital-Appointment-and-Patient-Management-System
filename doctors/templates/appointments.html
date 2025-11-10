@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Appointments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- ✅ SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body class="bg-violet-50 min-h-screen flex flex-col md:flex-row font-sans">
+    {% include "doctor_sidebar.html" %}
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 md:ml-64 p-4 sm:p-6 md:p-8 mt-4 md:mt-0 transition-all">
+      <h2 class="text-2xl sm:text-3xl font-bold text-pink-500 mb-6 text-center md:text-left">
+        📅 Appointments - Dr. {{ doctor.name }}
+      </h2>
+
+      <!-- TODAY -->
+      <section class="mb-8">
+        <h3 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3">Today's Appointments</h3>
+        {% if todays_appointments %}
+        <ul class="bg-white rounded-xl shadow p-3 sm:p-4 space-y-3">
+          {% for a in todays_appointments %}
+          <li id="appointment-{{ a.id }}" data-id="{{ a.id }}" data-status="{{ a.status }}"
+              class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 p-3 border rounded-lg 
+              {% if a.status == 'Cancelled' %}bg-rose-100 border-rose-400
+              {% elif a.status == 'Confirmed' %}bg-green-100 border-green-400
+              {% elif a.status == 'Completed' %}bg-gray-100 border-gray-400{% endif %}">
+            <div>
+              <p class="font-semibold text-rose-600 text-sm sm:text-base">{{ a.patient.name }}</p>
+              <p class="text-xs sm:text-sm text-gray-600">{{ a.time }} — <span class="status-text">{{ a.status }}</span></p>
+            </div>
+
+            <div class="buttons flex flex-wrap gap-2">
+              {% if a.status == "Pending" %}
+                <button data-status="Confirmed" class="statusBtn bg-green-500 hover:bg-green-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">✅ Confirm</button>
+                <button data-status="Cancelled" class="statusBtn bg-rose-500 hover:bg-rose-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">❌ Cancel</button>
+              {% elif a.status == "Confirmed" %}
+                <button data-status="Completed" class="statusBtn bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">✔ Done</button>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-500 italic text-center sm:text-left">No appointments today 💨</p>
+        {% endif %}
+      </section>
+
+      <!-- UPCOMING -->
+      <section>
+        <h3 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3">Upcoming Appointments</h3>
+        {% if upcoming_appointments %}
+        <ul class="bg-white rounded-xl shadow p-3 sm:p-4 space-y-3">
+          {% for a in upcoming_appointments %}
+          <li id="appointment-{{ a.id }}" data-id="{{ a.id }}" data-status="{{ a.status }}"
+              class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 p-3 border rounded-lg 
+              {% if a.status == 'Cancelled' %}bg-rose-100 border-rose-400
+              {% elif a.status == 'Confirmed' %}bg-green-100 border-green-400
+              {% elif a.status == 'Completed' %}bg-gray-100 border-gray-400{% endif %}">
+            <div>
+              <p class="font-semibold text-violet-600 text-sm sm:text-base">{{ a.patient.name }}</p>
+              <p class="text-xs sm:text-sm text-gray-600">{{ a.date }} at {{ a.time }} — <span class="status-text">{{ a.status }}</span></p>
+            </div>
+
+            <div class="buttons flex flex-wrap gap-2">
+              {% if a.status == "Pending" %}
+                <button data-status="Confirmed" class="statusBtn bg-green-500 hover:bg-green-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">✅ Confirm</button>
+                <button data-status="Cancelled" class="statusBtn bg-rose-500 hover:bg-rose-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">❌ Cancel</button>
+              {% elif a.status == "Confirmed" %}
+                <button data-status="Completed" class="statusBtn bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">✔ Done</button>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-500 italic text-center sm:text-left">No upcoming appointments 🌸</p>
+        {% endif %}
+      </section>
+
+      <!-- PREVIOUS -->
+<section class="mt-8">
+  <!-- PREVIOUS / COMPLETED APPOINTMENTS -->
+<div class="bg-white rounded-2xl glow p-4 sm:p-6 mb-8">
+  <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">🕓 Previous Appointments</h2>
+  {% if previous_appointments %}
+  <ul class="divide-y divide-pink-50">
+    {% for appt in previous_appointments %}
+    <li class="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+      <div>
+        <p class="text-sm font-semibold text-gray-700">{{ appt.patient.name }}</p>
+        <p class="text-xs text-gray-500">{{ appt.date }} @ {{ appt.time }}</p>
+      </div>
+      <span class="px-3 py-1 text-xs rounded-full self-start sm:self-auto bg-gray-100 text-gray-600">
+        ✔ Completed
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-gray-400 text-sm italic">No previous appointments 🕊️</p>
+  {% endif %}
+</div>
+
+</section>
+
+    </main>
+    <!-- ✅ Working AJAX + clickable buttons -->
+<script>
+  // Get CSRF token
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  // 🔗 Create a function that triggers URL call
+  async function updateAppointmentStatus(li, newStatus) {
+    const appointmentId = li.dataset.id;
+
+    try {
+      const response = await fetch(`/doctors/appointments/${appointmentId}/update/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrftoken,
+          "X-Requested-With": "XMLHttpRequest",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ status: newStatus }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // ✅ Update text
+        li.querySelector(".status-text").textContent = data.status;
+
+        // ✅ Update design
+        li.classList.remove("bg-rose-100", "bg-green-100", "bg-gray-100", "border-rose-400", "border-green-400", "border-gray-400");
+
+        const btnDiv = li.querySelector(".buttons");
+        if (data.status === "Confirmed") {
+          li.classList.add("bg-green-100", "border-green-400");
+          btnDiv.innerHTML = `
+            <a href="/doctors/appointments/${appointmentId}/update/?status=Completed" 
+               class="statusBtn bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg" 
+               data-status="Completed">✔ Done</a>`;
+        } else if (data.status === "Cancelled") {
+          li.classList.add("bg-rose-100", "border-rose-400");
+          btnDiv.innerHTML = `<span class="text-rose-600 font-semibold text-sm">❌ Cancelled</span>`;
+        } else if (data.status === "Completed") {
+          li.classList.add("bg-gray-100", "border-gray-400");
+          btnDiv.innerHTML = `<span class="text-gray-500 font-semibold text-sm">✔ Completed</span>`;
+        }
+
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "success",
+          title: `Appointment marked as ${data.status}`,
+          showConfirmButton: false,
+          timer: 1800,
+        });
+
+        // Reattach listeners for new buttons
+        btnDiv.querySelectorAll(".statusBtn").forEach(b =>
+          b.addEventListener("click", handleStatusClick)
+        );
+      } else {
+        Swal.fire("Error", data.error || "Update failed", "error");
+      }
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Something went wrong!", "error");
+    }
+  }
+
+  // 🔘 When a button is clicked
+  async function handleStatusClick(e) {
+    e.preventDefault(); // stop browser from reloading
+    const li = this.closest("li");
+    const newStatus = this.dataset.status;
+
+    const confirm = await Swal.fire({
+      title: `Change status to ${newStatus}?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    });
+
+    if (confirm.isConfirmed) {
+      updateAppointmentStatus(li, newStatus);
+    }
+  }
+
+  // ✅ Attach all buttons
+  document.querySelectorAll(".statusBtn").forEach(btn => {
+    btn.addEventListener("click", handleStatusClick);
+  });
+</script>
+
+  </body>
+</html>
