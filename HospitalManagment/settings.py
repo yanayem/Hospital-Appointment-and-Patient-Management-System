@@ -9,15 +9,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*vqjb^gik*y9ibp^as8fi5=+(al2p)rztlo9q#pz&6no^fowg-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ["hospital-appointment-and-patient.onrender.com"]
-CSRF_TRUSTED_ORIGINS = [ "https://hospital-appointment-and-patient.onrender.com",]
-CSRF_TRUSTED_ORIGINS = [
-  # "https://hospital-appointment-and-patient.onrender.com",
-   # "http://127.0.0.1:8000",
-   # "http://localhost:8000",
-]
+ALLOWED_HOSTS = ["hospital-appointment-and-patient.onrender.com"]
+CSRF_TRUSTED_ORIGINS = [ "https://hospital-appointment-and-patient.onrender.com"]
+
 
 
 
