@@ -133,14 +133,32 @@ LOGIN_URL = '/accounts/'
 
 import os
 # Keep this at the top:
+#from pathlib import Path
+#BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Static files (CSS, JS, Images)
+#STATIC_URL = '/static/'
+#STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Media files (user-uploaded / stored in static/media)
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = BASE_DIR / "static" / "media"
+
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Static files (CSS, JS, Images)
+# Static files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfile"
 
-# Media files (user-uploaded / stored in static/media)
+# Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / "static" / "media"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# Default primary key
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Login redirect
+LOGIN_URL = 'LogInSignUppage'  # Remove the second LOGIN_URL line
 
