@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-*vqjb^gik*y9ibp^as8fi5=+(al2p)rztlo9q#pz&6no^fowg-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ["hospital-appointment-and-patient.onrender.com"]
+ALLOWED_HOSTS = ["hospital-appointment-and-patient.onrender.com"]
 CSRF_TRUSTED_ORIGINS = [ "https://hospital-appointment-and-patient.onrender.com",]
 CSRF_TRUSTED_ORIGINS = [
    "https://hospital-appointment-and-patient.onrender.com",
