@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
-
+from doctors.models import DoctorProfile
 from accounts.models import UserProfile
 from .models import (
     PatientProfile,
@@ -95,17 +95,42 @@ def patient_profile(request):
 #   APPOINTMENTS
 # ==========================
 
+# ==========================
+#   APPOINTMENTS
+# ==========================
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.contrib import messages
+from django.utils.timezone import now
+from doctors.models import DoctorProfile
+from patients.models import Appointment, Notification
+from accounts.views import get_session_user
+
+
 @login_required_view
-def book_appointment(request):
+def book_appointment(request, doctor_id=None):
+    """
+    Book an appointment page.
+    - If doctor_id is given, preselect that doctor.
+    - Redirects to login if patient not logged in.
+    """
+    # Get patient from session
     patient = get_session_user(request)
-    if not patient:
-        messages.warning(request, "Please login first.")
-        return redirect("LogInSignUppage")
+    if not patient or patient.user_type != "patient":
+        login_url = reverse("LogInSignUppage")
+        return redirect(f"{login_url}?next={request.path}")
 
-    doctors = UserProfile.objects.filter(user_type="doctor")
+    # List of all doctors
+    doctors = DoctorProfile.objects.all()
 
+    # Preselect doctor if doctor_id is given
+    selected_doctor = None
+    if doctor_id:
+        selected_doctor = get_object_or_404(DoctorProfile, id=doctor_id)
+
+    # Handle form submission
     if request.method == "POST":
-        doctor_id = request.POST.get("doctor")
+        doctor_id_post = request.POST.get("doctor")
         service = request.POST.get("service")
         email = request.POST.get("email")
         phone = request.POST.get("phone")
@@ -113,13 +138,15 @@ def book_appointment(request):
         appointment_time = request.POST.get("time")
         reason = request.POST.get("reason")
 
-        if not all([doctor_id, service, email, phone, appointment_date, appointment_time]):
+        if not all([doctor_id_post, service, email, phone, appointment_date, appointment_time]):
             messages.error(request, "Please fill in all required fields 💖")
-            return redirect('book_appointment')
+            return redirect(request.path)  # redirect back to same page
 
-        doctor = get_object_or_404(UserProfile, id=doctor_id, user_type="doctor")
+        # Get DoctorProfile object
+        doctor = get_object_or_404(DoctorProfile, id=doctor_id_post)
 
-        appt = Appointment.objects.create(
+        # Create appointment
+        Appointment.objects.create(
             patient=patient,
             doctor=doctor,
             service=service,
@@ -129,21 +156,24 @@ def book_appointment(request):
             time=appointment_time,
             reason=reason
         )
-        # 💌 Create notification
+
+        # Create notification
         Notification.objects.create(
             patient=patient,
             title="Appointment Booked 💖",
-            message=f"Your appointment with Dr. {doctor.name} on {appointment_date} at {appointment_time} has been booked successfully."
+            message=f"Your appointment with Dr. {doctor.user.name} on {appointment_date} at {appointment_time} has been booked successfully."
         )
 
-        messages.success(request, f"Appointment booked with Dr. {doctor.name}! 💕")
+        messages.success(request, f"Appointment booked with Dr. {doctor.user.name}! 💕")
         return redirect('my_appointments')
 
     context = {
         "patient": patient,
         "doctors": doctors,
+        "selected_doctor": selected_doctor,
         "today": now().date()
     }
+
     return render(request, "book_appointment.html", context)
 
 from datetime import date

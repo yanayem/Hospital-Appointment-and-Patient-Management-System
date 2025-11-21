@@ -88,17 +88,18 @@
               <i class="fa-solid fa-money-bill-wave text-pink-400 mr-1"></i>
               Consultation  Fee:
               <span class="font-medium text-pink-600"
-                >{{ doctor.visit_fee }} ৳</span
+                >{{ doctor.user.visit_fee }} ৳</span
               >
             </p>
 
             <!-- Button -->
-            <a
-              href="{% url 'book_appointment' doctor.id %}"
-              class="inline-flex items-center justify-center gap-2 mt-5 px-5 py-2.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white font-medium rounded-full shadow-sm hover:scale-105 transition-transform duration-200"
-            >
-              <i class="fa-solid fa-calendar-check"></i> Book Appointment
-            </a>
+          <a href="{% url 'LogInSignUppage' %}?next={% url 'book_appointment_with_id' doctor.id %}"
+   class="inline-flex items-center justify-center gap-2 mt-5 px-5 py-2.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white font-medium rounded-full shadow-sm hover:scale-105 transition-transform duration-200">
+   <i class="fa-solid fa-calendar-check"></i> Book Appointment
+</a>
+
+
+
           </div>
         </div>
         {% endfor %}

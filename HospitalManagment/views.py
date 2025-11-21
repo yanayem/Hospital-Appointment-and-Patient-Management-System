@@ -1,6 +1,4 @@
 from django.shortcuts import render
-# from django.contrib.auth.models import User  # remove
-# from .models import UserProfile  # remove
 from accounts.models import UserProfile
 
 # ------------------------- PUBLIC PAGES -------------------------
@@ -23,9 +21,8 @@ def servicespage(request):
 
 from django.shortcuts import render
 
-# 🌸 Ambulance Service Page (demo data)
+# Ambulance Service Page 
 def ambulance_service_page(request):
-    # Demo data list (can later be replaced with a model)
     ambulances = [
         {
             "name": "CityCare Ambulance",

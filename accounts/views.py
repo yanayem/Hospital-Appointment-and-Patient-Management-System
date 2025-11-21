@@ -4,10 +4,21 @@ from .models import UserProfile
 
 
 # ---------------- LOGIN & SIGNUP ----------------
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import UserProfile
+
 def login_signup(request):
+    """
+    Unified login and signup view.
+    Supports `next` parameter to redirect after login.
+    """
+    # Capture 'next' from GET (URL) or POST (form)
+    next_url = request.GET.get("next") or request.POST.get("next", "")
+
     if request.method == "POST":
 
-        # LOGIN
+        # ---------------- LOGIN ----------------
         if "login" in request.POST:
             email = request.POST.get("email")
             password = request.POST.get("password")
@@ -20,19 +31,22 @@ def login_signup(request):
                 pass
 
             if user:
-                # store user info in session
+                # Store user info in session
                 request.session["user_id"] = user.id
                 request.session["user_type"] = user.user_type
-                request.session["current_role"] = user.user_type  # for switching
+                request.session["current_role"] = user.user_type  # for role switching
 
-                if user.user_type == "doctor":
+                # Redirect to 'next' if exists, else default dashboard
+                if next_url:
+                    return redirect(next_url)
+                elif user.user_type == "doctor":
                     return redirect("doctor_dashboard")
                 else:
                     return redirect("patient_dashboard")
             else:
                 messages.error(request, "Invalid email or password!")
 
-        # SIGNUP
+        # ---------------- SIGNUP ----------------
         elif "signup" in request.POST:
             user_type = request.POST.get("user_type")
             name = request.POST.get("name")
@@ -55,7 +69,7 @@ def login_signup(request):
                     phone=phone,
                 )
 
-                # extra info
+                # Extra info
                 if user_type == "patient":
                     user.age = request.POST.get("age")
                     user.address = request.POST.get("address")
@@ -66,7 +80,8 @@ def login_signup(request):
                 user.save()
                 messages.success(request, "Account created successfully! Please log in.")
 
-    return render(request, "login_signup.html")
+    # Pass 'next' to template so hidden input can carry it
+    return render(request, "login_signup.html", {"next": next_url})
 
 
 # ---------------- HELPER ----------------

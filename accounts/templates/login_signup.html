@@ -169,6 +169,7 @@
                 class="space-y-4"
               >
                 {% csrf_token %}
+                 <input type="hidden" name="next" value="{{ next }}">
                 <input
                   name="email"
                   type="email"
