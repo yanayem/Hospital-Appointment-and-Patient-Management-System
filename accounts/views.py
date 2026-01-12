@@ -114,22 +114,6 @@ def get_session_user(request):
         return None
 
 
-
-# ---------------- DASHBOARDS ----------------
-def doctor_dashboard(request):
-    user = get_session_user(request)
-    if not user:
-        return redirect("LogInSignUppage")
-
-    if user.user_type != "doctor":
-        return redirect("patient_dashboard")
-
-    # Prevent doctor acting as patient mode
-    if request.session.get("current_role") == "patient":
-        return redirect("patient_dashboard")
-
-    return render(request, "doctor_dashboard.html", {"user": user})
-
 #======================
 
 # ---------------- ROLE SWITCH ----------------

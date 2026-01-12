@@ -12,7 +12,6 @@ SECRET_KEY = 'django-insecure-*vqjb^gik*y9ibp^as8fi5=+(al2p)rztlo9q#pz&6no^fowg-
 DEBUG = True
 ALLOWED_HOSTS = []
 
-
 ALLOWED_HOSTS = ["hospital-appointment-and-patient.onrender.com"]
 CSRF_TRUSTED_ORIGINS = [ "https://hospital-appointment-and-patient.onrender.com",]
 CSRF_TRUSTED_ORIGINS = [
@@ -37,8 +36,7 @@ INSTALLED_APPS = [
     'HospitalManagment', 
     'accounts', 
     'patients',
-    'doctors',
-           
+    'doctors',          
 ]
 
 

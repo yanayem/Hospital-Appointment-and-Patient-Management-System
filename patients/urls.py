@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 from django.conf import settings
-
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -12,9 +11,8 @@ urlpatterns = [
     # Booking page without a doctor selected
     path('book/', views.book_appointment, name='book_appointment'),
 
-# Booking page with a doctor selected
+    # Booking page with a doctor selected
     path("book-appointment/<int:doctor_id>/", views.book_appointment, name="book_appointment_with_id"),
-
 
     path('appointments/', views.my_appointments, name='my_appointments'),
     path('records/', views.health_records, name='health_records'),
@@ -24,8 +22,6 @@ urlpatterns = [
     path('appointments/edit/<int:id>/', views.edit_appointment, name='edit_appointment'),
     path('appointments/cancel/<int:id>/', views.cancel_appointment, name='cancel_appointment'),
 ]
-
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

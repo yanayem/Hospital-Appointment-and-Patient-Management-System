@@ -19,6 +19,7 @@ class UserProfile(models.Model):
     USER_TYPE_CHOICES = (('patient', 'Patient'), ('doctor', 'Doctor'))
 
     username = models.CharField(max_length=150, unique=True)
+    current_role = models.CharField(max_length=20, choices=[("doctor","Doctor"),("patient","Patient")], default="patient")
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
     password = models.CharField(max_length=256)

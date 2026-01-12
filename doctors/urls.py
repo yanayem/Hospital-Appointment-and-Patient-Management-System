@@ -11,11 +11,9 @@ urlpatterns = [
     path("notes/delete/<int:note_id>/", views.delete_note, name="delete_note"),
     path('notifications/', views.doctor_notifications, name='doctor_notifications'),
     path('profile/', views.doctor_profile, name='doctor_profile'),
+    path("health-records/", views.doctor_health_records, name="doctor_health_records"),
 
-    # ❌ Remove this line because no such view exists
-     path("health-records/", views.doctor_health_records, name="doctor_health_records"),
-
-   # path("prescriptions/", views.doctor_prescriptions, name="doctor_prescriptions"),
+    #path("prescriptions/", views.doctor_prescriptions, name="doctor_prescriptions"),
 
     # ✅ Correct health record routes
     path('patient/<int:patient_id>/records/', views.view_health_records, name='view_health_records'),

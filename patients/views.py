@@ -7,15 +7,14 @@ from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
 from doctors.models import DoctorProfile
 from accounts.models import UserProfile
-from .models import (
-    PatientProfile,
-    Appointment,
-    HealthRecord,
-    Prescription,
-    Notification
-)
-#=========================
-
+from .models import ( Appointment, HealthRecord, Prescription, Notification, PatientProfile)
+from django.utils.timezone import localdate
+from django.urls import reverse
+from datetime import date
+from django.shortcuts import render, redirect
+from django.utils.timezone import localtime
+from datetime import datetime
+import pytz
 
 # ==========================
 #   HELPERS
@@ -38,6 +37,9 @@ def get_session_user(request):
     except UserProfile.DoesNotExist:
         return None
 
+# ==========================
+#   DECORATORS
+# ==========================
 
 def login_required_view(func):
     """Custom decorator for session-based login."""
@@ -50,58 +52,64 @@ def login_required_view(func):
     return wrapper
 
 
-# ==========================
-#   PATIENT PROFILE
-# ==========================
+#=========================================
+#   PATIENT DASHBOARD
+#==========================================
+
 @login_required_view
-def patient_profile(request):
-    """View and update patient profile"""
-    patient = get_session_user(request)
-    if not patient:
+def patient_dashboard(request):
+    user = get_session_user(request)
+    if not user:
         return redirect("LogInSignUppage")
 
-    # Always link to UserProfile (NOT username)
-    profile, created = PatientProfile.objects.get_or_create(user=patient)
+    # Allow doctor in patient mode
+    is_doctor_as_patient = user.user_type == "doctor" and getattr(user, "current_role", None) == "patient"
+    show_back_to_doctor = is_doctor_as_patient
 
-    if request.method == "POST":
-        if 'profile_pic' in request.FILES:
-            profile.profile_pic = request.FILES['profile_pic']
-            profile.save()
-            messages.success(request, "Profile picture updated!")
-            return redirect("patient_profile")
-        else:
-            # Save other info
-            patient.name = request.POST.get("name", patient.name)
-            patient.phone = request.POST.get("phone", patient.phone)
-            patient.age = request.POST.get("age", patient.age)
-            patient.gender = request.POST.get("gender", patient.gender)
-            patient.save()
-            profile.blood_group = request.POST.get("blood_group", profile.blood_group)
-            profile.address = request.POST.get("address", profile.address)
-            profile.save()
-            messages.success(request, "Profile updated successfully!")
-            return redirect("patient_profile")
+    # ✅ Fetch related data
+    health_records = HealthRecord.objects.filter(patient=user).order_by("-date")
+    prescriptions = Prescription.objects.filter(patient=user).order_by("-date")
+    notifications = Notification.objects.filter(patient=user).order_by("-created_at")
 
+    # ✅ Appointment data (if model exists)
+    today = date.today()
+
+    today_appointments = Appointment.objects.filter(
+        patient=user,
+        date=today
+    ).order_by("time")
+
+    upcoming_appointments = Appointment.objects.filter(
+        patient=user,
+        date__gt=today
+    ).order_by("date", "time")[:2]
+
+    # ✅ Identify missing personal fields for “Profile Incomplete” message
+    missing_fields = []
+    for field in ["age", "address", "phone", "gender", "blood_group"]:
+        if not getattr(user, field, None):
+            missing_fields.append(field)
+
+    # ✅ Context
     context = {
-        "patient": patient,
-        "profile": profile,
-        "blood_groups": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
-        "genders": ["Male", "Female", "Other"],
+        "user": user,
+        "patient": user,
+        "show_back_to_doctor": show_back_to_doctor,
+        "acting_as_patient": is_doctor_as_patient,
+        "health_records": health_records,
+        "prescriptions": prescriptions,
+        "notifications": notifications,
+        "missing_personal_fields": missing_fields,
+        "today_appointments": today_appointments,
+        "upcoming_appointments": upcoming_appointments,
     }
-    return render(request, "patient_profile.html", context)
+
+    return render(request, "patient_dashboard.html", context)
 
 
 # ==========================
 #   APPOINTMENTS
 # ==========================
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
-from django.contrib import messages
-from django.utils.timezone import now
-from doctors.models import DoctorProfile
-from patients.models import Appointment, Notification
-from accounts.views import get_session_user
-
 
 @login_required_view
 def book_appointment(request, doctor_id=None):
@@ -180,7 +188,10 @@ def book_appointment(request, doctor_id=None):
 
     return render(request, "book_appointment.html", context)
 
-from django.utils.timezone import localdate
+
+#=========================
+#   VIEW APPOINTMENTS
+#========================
 
 @login_required_view
 def my_appointments(request):
@@ -188,18 +199,29 @@ def my_appointments(request):
     if not patient:
         return redirect("LogInSignUppage")
 
-    today = localdate()
+    # -----------------------------
+    #  Dhaka timezone today
+    # -----------------------------
+    dhaka_tz = pytz.timezone("Asia/Dhaka")
+    now_dhaka = datetime.now(dhaka_tz)
+    today_dhaka = now_dhaka.date()
 
+    # -----------------------------
+    #  TODAY appointments
+    # -----------------------------
     todays_appointments = Appointment.objects.filter(
         patient=patient,
-        date=today
+        date=today_dhaka
     ).exclude(
         status__in=["Cancelled", "Completed"]
     ).order_by("time")
 
+    # -----------------------------
+    #  UPCOMING appointments
+    # -----------------------------
     upcoming_appointments = Appointment.objects.filter(
         patient=patient,
-        date__gt=today
+        date__gt=today_dhaka
     ).exclude(
         status__in=["Cancelled", "Completed"]
     ).order_by("date", "time")
@@ -213,6 +235,9 @@ def my_appointments(request):
 # action appointment
 #======================
 
+#-------------------------
+# edit appointment
+#-------------------------
 
 @login_required_view
 def edit_appointment(request, id):
@@ -233,6 +258,9 @@ def edit_appointment(request, id):
 
     return render(request, 'edit_appointment.html', {'appointment': appointment})
 
+#-------------------------
+# cancel appointment
+#-----------------------
 
 @login_required_view
 def cancel_appointment(request, id):
@@ -268,6 +296,10 @@ def health_records(request):
     records = HealthRecord.objects.filter(patient=patient).order_by('-date')
     return render(request, "health_records.html", {"records": records, "patient": patient})
 
+
+#-------------------------
+# add health record
+#-------------------------
 
 @login_required_view
 def add_health_record(request):
@@ -332,10 +364,50 @@ def notifications(request):
     return render(request, 'notifications.html', {"patient": patient, "notifications": notifications})
 
 
+# ==========================
+#   PATIENT PROFILE
+# ==========================
 
-from django.shortcuts import redirect
-from django.contrib import messages
-from .models import PatientProfile
+@login_required_view
+def patient_profile(request):
+    """View and update patient profile"""
+    patient = get_session_user(request)
+    if not patient:
+        return redirect("LogInSignUppage")
+
+    # Always link to UserProfile (NOT username)
+    profile, created = PatientProfile.objects.get_or_create(user=patient)
+
+    if request.method == "POST":
+        if 'profile_pic' in request.FILES:
+            profile.profile_pic = request.FILES['profile_pic']
+            profile.save()
+            messages.success(request, "Profile picture updated!")
+            return redirect("patient_profile")
+        else:
+            # Save other info
+            patient.name = request.POST.get("name", patient.name)
+            patient.phone = request.POST.get("phone", patient.phone)
+            patient.age = request.POST.get("age", patient.age)
+            patient.gender = request.POST.get("gender", patient.gender)
+            patient.save()
+            profile.blood_group = request.POST.get("blood_group", profile.blood_group)
+            profile.address = request.POST.get("address", profile.address)
+            profile.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect("patient_profile")
+
+    context = {
+        "patient": patient,
+        "profile": profile,
+        "blood_groups": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+        "genders": ["Male", "Female", "Other"],
+    }
+    return render(request, "patient_profile.html", context)
+
+#-------------------------
+# delete patient pic
+#-------------------------
 
 def delete_patient_pic(request):
     user = get_session_user(request)
@@ -358,69 +430,9 @@ def delete_patient_pic(request):
     return redirect('patient_profile')
 
 
-from django.shortcuts import render
+#=========================
+# contact support
+#=========================
 
 def contact_support(request):
     return render(request, "contact_support.html")
-
-
-
-#=========================================
-#
-#==========================================
-
-from django.shortcuts import render, redirect
-from datetime import date
-from accounts.models import UserProfile
-from patients.models import HealthRecord, Prescription, Notification
-# Make sure Appointment model exists:
-from patients.models import Appointment  
-
-def patient_dashboard(request):
-    user = get_session_user(request)
-    if not user:
-        return redirect("LogInSignUppage")
-
-    # Allow doctor in patient mode
-    is_doctor_as_patient = user.user_type == "doctor" and getattr(user, "current_role", None) == "patient"
-    show_back_to_doctor = is_doctor_as_patient
-
-    # ✅ Fetch related data
-    health_records = HealthRecord.objects.filter(patient=user).order_by("-date")
-    prescriptions = Prescription.objects.filter(patient=user).order_by("-date")
-    notifications = Notification.objects.filter(patient=user).order_by("-created_at")
-
-    # ✅ Appointment data (if model exists)
-    today = date.today()
-
-    today_appointments = Appointment.objects.filter(
-        patient=user,
-        date=today
-    ).order_by("time")
-
-    upcoming_appointments = Appointment.objects.filter(
-        patient=user,
-        date__gt=today
-    ).order_by("date", "time")[:2]
-
-    # ✅ Identify missing personal fields for “Profile Incomplete” message
-    missing_fields = []
-    for field in ["age", "address", "phone", "gender", "blood_group"]:
-        if not getattr(user, field, None):
-            missing_fields.append(field)
-
-    # ✅ Context
-    context = {
-        "user": user,
-        "patient": user,
-        "show_back_to_doctor": show_back_to_doctor,
-        "acting_as_patient": is_doctor_as_patient,
-        "health_records": health_records,
-        "prescriptions": prescriptions,
-        "notifications": notifications,
-        "missing_personal_fields": missing_fields,
-        "today_appointments": today_appointments,
-        "upcoming_appointments": upcoming_appointments,
-    }
-
-    return render(request, "patient_dashboard.html", context)

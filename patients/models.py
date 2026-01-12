@@ -1,10 +1,16 @@
 # patients/models.py
+#=========================
+# Imports
+#=========================
+
 from django.db import models
 from accounts.models import UserProfile
 from django.utils import timezone
 from doctors.models import Appointment
 
-
+#=========================
+# PatientProfile Model
+#========================
 class PatientProfile(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name="patient_profile")
     
@@ -25,7 +31,9 @@ class PatientProfile(models.Model):
         return f"Patient Profile: {self.user.name}"
 
 
-
+#=========================
+# HealthRecord Model
+#========================
 
 class HealthRecord(models.Model):
     patient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="health_records")
@@ -38,8 +46,10 @@ class HealthRecord(models.Model):
     def __str__(self):
         return f"Record of {self.patient.name} by {self.doctor.name if self.doctor else 'Unknown'}"
 
-from django.db import models
-from accounts.models import UserProfile
+
+#=========================
+# Prescription Model
+#========================
 
 class Prescription(models.Model):
     patient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='prescriptions')
@@ -55,9 +65,9 @@ class Prescription(models.Model):
 
 
 #=========================
-# patients/models.py
-from django.db import models
-from accounts.models import UserProfile
+# Notification Model
+#=========================
+
 
 class Notification(models.Model):
     patient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications')

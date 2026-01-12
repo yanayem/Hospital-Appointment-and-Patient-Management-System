@@ -12,10 +12,10 @@
   <div class="ml-68 p-8 mt-10 max-w-3xl mx-auto">
     
     <!-- ✅ Back button -->
-    <a href="javascript:history.back()" 
-       class="inline-block mb-4 bg-gradient-to-r from-rose-400 to-pink-400 text-white rounded-xl hover:from-rose-500 hover:to-pink-500 px-4 py-2 rounded-lg transition">
-      ⬅️ Back to Previous Page
-    </a>
+    {% if show_back_to_doctor %}
+<a href="{% url 'back_to_doctor' %}" class="btn btn-warning">Back to Doctor Portal 🩺</a>
+{% endif %}
+
 
     <!-- ✅ Title with Dr. prefix if doctor -->
     <h1 class="text-3xl font-bold text-pink-600 text-center mb-6">

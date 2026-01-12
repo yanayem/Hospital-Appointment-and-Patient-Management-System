@@ -2,12 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doctor Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
   <style>
     body { font-family: 'Poppins', sans-serif; }
     .glow {
@@ -20,12 +19,10 @@
     }
   </style>
 </head>
-
 <body class="bg-gradient-to-br from-pink-50 via-rose-100 to-violet-100 min-h-screen flex flex-col md:flex-row">
 
-   {% include 'doctor_sidebar.html' %}
+  {% include 'doctor_sidebar.html' %}
 
-  <!-- MAIN CONTENT -->
   <main class="flex-1 p-4 sm:p-6 md:ml-64 mt-4 md:mt-0 transition-all duration-300">
 
     <!-- Header -->
@@ -42,20 +39,18 @@
       </a>
     </div>
 
-    <!-- STATS -->
+    <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
       <div class="bg-white p-5 rounded-2xl glow text-center">
         <p class="text-xs sm:text-sm text-pink-400 font-semibold uppercase">Upcoming</p>
         <p class="text-2xl sm:text-3xl font-bold text-violet-700">{{ upcoming_appointments|length }}</p>
         <p class="text-gray-400 text-xs sm:text-sm">Appointments</p>
       </div>
-
       <div class="bg-white p-5 rounded-2xl glow text-center">
         <p class="text-xs sm:text-sm text-violet-400 font-semibold uppercase">Completed</p>
         <p class="text-2xl sm:text-3xl font-bold text-violet-700">{{ recent_histories|length }}</p>
         <p class="text-gray-400 text-xs sm:text-sm">Histories</p>
       </div>
-
       <div class="bg-white p-5 rounded-2xl glow text-center relative">
         <p class="text-xs sm:text-sm text-rose-400 font-semibold uppercase">Notifications</p>
         <p class="text-2xl sm:text-3xl font-bold text-violet-700">{{ notifications|length }}</p>
@@ -68,33 +63,38 @@
       </div>
     </div>
 
-    <!-- TODAY'S APPOINTMENTS -->
-    <div class="bg-white rounded-2xl glow p-4 sm:p-6 mb-8">
-      <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">🌸 Today's Appointments</h2>
+    <!-- Today's Appointments -->
+    <section class="mb-8">
+      <h3 class="text-lg sm:text-xl font-semibold text-gray-700 mb-3">Today's Appointments</h3>
       {% if todays_appointments %}
-      <ul class="divide-y divide-pink-50">
-        {% for appt in todays_appointments %}
-        <li class="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+      <ul class="bg-white rounded-xl shadow p-3 sm:p-4 space-y-3">
+        {% for a in todays_appointments %}
+        <li id="appointment-{{ a.id }}" data-id="{{ a.id }}" data-status="{{ a.status }}"
+            class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 p-3 border rounded-lg
+            {% if a.status == 'Cancelled' %}bg-rose-100 border-rose-400
+            {% elif a.status == 'Confirmed' %}bg-green-100 border-green-400
+            {% elif a.status == 'Completed' %}bg-gray-100 border-gray-400{% endif %}">
           <div>
-            <p class="text-sm font-semibold text-violet-700">{{ appt.patient.name }}</p>
-            <p class="text-xs text-gray-500">{{ appt.time }} — {{ appt.service|default:"General Checkup" }}</p>
+            <p class="font-semibold text-rose-600 text-sm sm:text-base">{{ a.patient.name }}</p>
+            <p class="text-xs sm:text-sm text-gray-600">{{ a.time }} — <span class="status-text">{{ a.status }}</span></p>
           </div>
-          <span class="px-3 py-1 text-xs rounded-full self-start sm:self-auto
-            {% if appt.status == 'Confirmed' %}bg-green-100 text-green-600
-            {% elif appt.status == 'Pending' %}bg-yellow-50 text-yellow-700
-            {% elif appt.status == 'Cancelled' %}bg-rose-50 text-rose-600
-            {% else %}bg-blue-50 text-blue-600{% endif %}">
-            {{ appt.status }}
-          </span>
+          <div class="buttons flex flex-wrap gap-2">
+            {% if a.status == "Pending" %}
+            <button data-status="Confirmed" class="statusBtn bg-green-500 hover:bg-green-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">✅ Confirm</button>
+            <button data-status="Cancelled" class="statusBtn bg-rose-500 hover:bg-rose-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">❌ Cancel</button>
+            {% elif a.status == "Confirmed" %}
+            <button data-status="Completed" class="statusBtn bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm px-3 py-1 rounded-lg">✔ Done</button>
+            {% endif %}
+          </div>
         </li>
         {% endfor %}
       </ul>
       {% else %}
-      <p class="text-gray-400 text-sm italic">No appointments today 💕</p>
+      <p class="text-gray-500 italic text-center sm:text-left">No appointments today 💨</p>
       {% endif %}
-    </div>
+    </section>
 
-    <!-- UPCOMING APPOINTMENTS -->
+    <!-- Upcoming Appointments -->
     <div class="bg-white rounded-2xl glow p-4 sm:p-6 mb-8">
       <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">📅 Upcoming Appointments</h2>
       {% if upcoming_appointments %}
@@ -121,7 +121,7 @@
       {% endif %}
     </div>
 
-    <!-- NOTES -->
+    <!-- Notes -->
     <div class="bg-white rounded-2xl glow p-4 sm:p-6 mb-8">
       <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">📝 Your Recent Notes</h2>
       {% if notes %}
@@ -138,7 +138,7 @@
       {% endif %}
     </div>
 
-    <!-- NOTIFICATIONS -->
+    <!-- Notifications -->
     <div class="bg-white rounded-2xl glow p-4 sm:p-6">
       <h2 class="text-lg sm:text-xl font-semibold text-violet-700 mb-3 sm:mb-4">🔔 Notifications</h2>
       {% if notifications %}
@@ -157,11 +157,10 @@
 
     <footer class="text-center mt-10 text-xs text-gray-400">
        © 2026 Medicare Hospital. All Rights Reserved. <br>
-    Designed by 
-    <a href="https://yanayem.vercel.app" target="_blank" class="text-pink-600 hover:underline font-semibold">
-      Yesain Arafat Nayem Bhuiyan
-    </a>
+       Designed by <a href="https://yanayem.vercel.app" target="_blank" class="text-pink-600 hover:underline font-semibold">
+       Yesain Arafat Nayem Bhuiyan</a>
     </footer>
+
   </main>
 
   <!-- JS: Mobile Sidebar Toggle -->

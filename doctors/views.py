@@ -1,16 +1,24 @@
 # doctors/views.py
+#==================================================
+#  IMPORTS
+#==================================================
+
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.utils.timezone import now
+from django.utils.timezone import now, localtime
 from django.db.models import Q
 from django.http import JsonResponse
-from datetime import date, timedelta
 from accounts.models import UserProfile
 from .models import DoctorProfile, Appointment, DoctorNote, DoctorNotification
 from django.utils import timezone
 from patients.models import Notification
 from django.views.decorators.http import require_POST
-
+from datetime import date, datetime, timedelta
+from patients.models import HealthRecord
+from .models import Appointment
+from django.contrib import messages
+import os
+from django.utils.timezone import localdate
+import pytz
 
 # ===================================================
 #  HELPERS
@@ -26,6 +34,9 @@ def get_session_user(request):
     except UserProfile.DoesNotExist:
         return None
 
+# ===================================================
+#  LOGIN REQUIRED DECORATOR
+# ===================================================
 
 def login_required_view(func):
     """Decorator for session-based doctor login"""
@@ -39,56 +50,6 @@ def login_required_view(func):
 
 
 # ===================================================
-# 🩵  DOCTOR PROFILE
-# ===================================================
-
-@login_required_view
-def doctor_profile(request):
-    doctor = get_session_user(request)
-    if not doctor:
-        return redirect("LogInSignUppage")
-
-    profile, _ = DoctorProfile.objects.get_or_create(user=doctor)
-
-    if request.method == "POST":
-        if "profile_pic" in request.FILES:
-            profile.profile_pic = request.FILES["profile_pic"]
-            profile.save()
-            messages.success(request, "Profile picture updated successfully 💖")
-            return redirect("doctor_profile")
-
-        # Update doctor basic info
-        doctor.name = request.POST.get("name", doctor.name)
-        doctor.phone = request.POST.get("phone", doctor.phone)
-        doctor.email = request.POST.get("email", doctor.email)
-        doctor.address = request.POST.get("address", doctor.address)
-        doctor.gender = request.POST.get("gender", doctor.gender)
-        doctor.visit_fee = request.POST.get("visit_fee", doctor.visit_fee)
-        doctor.save()
-
-        # Update extended profile info
-        profile.specialization = request.POST.get("specialization", profile.specialization)
-        profile.highest_qualification = request.POST.get("highest_qualification", profile.highest_qualification)
-        profile.license = request.POST.get("license", profile.license)
-        profile.experience_years = request.POST.get("experience_years", profile.experience_years)
-        profile.expertise_areas = request.POST.get("expertise_areas", profile.expertise_areas)
-        profile.specialized_treatments = request.POST.get("specialized_treatments", profile.specialized_treatments)
-        profile.biography = request.POST.get("biography", profile.biography)
-        profile.address = request.POST.get("address", profile.address)
-        profile.save()
-
-        messages.success(request, "Profile updated successfully 💕")
-        return redirect("doctor_profile")
-
-    context = {
-        "doctor": doctor,
-        "profile": profile,
-        "genders": ["Male", "Female", "Other"],
-    }
-    return render(request, "doctor_profile.html", context)
-
-
-# ===================================================
 #  DOCTOR DASHBOARD
 # ===================================================
 
@@ -98,47 +59,42 @@ def doctor_dashboard(request):
     if not doctor:
         return redirect("LogInSignUppage")
 
-    today = timezone.now().date()
+    # -----------------------------
+    #  Dhaka timezone today
+    # -----------------------------
+    dhaka_tz = pytz.timezone("Asia/Dhaka")
+    now_dhaka = datetime.now(dhaka_tz)
+    today_dhaka = now_dhaka.date()
 
-    # Appointments
+    # -----------------------------
+    #  TODAY appointments
+    # -----------------------------
     todays_appointments = Appointment.objects.filter(
-        doctor=doctor, date=today
+        doctor=doctor,
+        date=today_dhaka
     ).order_by("time")
 
+    # -----------------------------
+    #  UPCOMING appointments (tomorrow onwards)
+    # -----------------------------
     upcoming_appointments = Appointment.objects.filter(
-        doctor=doctor, date__gt=today
-    ).order_by("date", "time")[:5]
-
-    recent_histories = Appointment.objects.filter(
-        doctor=doctor, status="Completed"
-    ).order_by("-date", "-time")[:5]
-
-    # Notes & Notifications
-    notes = DoctorNote.objects.filter(doctor=doctor).order_by("-created_at")[:5]
-    notifications = DoctorNotification.objects.filter(doctor=doctor).distinct().order_by("-created_at")
-    unread_count = notifications.filter(is_read=False).count()
+        doctor=doctor,
+        date__gt=today_dhaka,
+        status__in=["Pending", "Confirmed"]
+    ).order_by("date", "time")
 
     context = {
         "doctor": doctor,
+        "today": today_dhaka,
         "todays_appointments": todays_appointments,
         "upcoming_appointments": upcoming_appointments,
-        "recent_histories": recent_histories,
-        "notes": notes,
-        "notifications": notifications,
-        "unread_count": unread_count,
-        "today": today,
     }
 
     return render(request, "doctor_dashboard.html", context)
 
-
 # ===================================================
 #  APPOINTMENTS
 # ===================================================
-
-from datetime import date, datetime, timedelta
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.timezone import localtime
 
 @login_required_view
 def doctor_appointments(request):
@@ -185,6 +141,9 @@ def doctor_appointments(request):
     }
     return render(request, "appointments.html", context)
 
+#--------------------------------------------------
+# Update appointment status (AJAX or normal POST)
+#--------------------------------------------------
 
 @require_POST
 @login_required_view
@@ -225,6 +184,9 @@ def update_appointment_status(request, appointment_id):
     messages.success(request, f"Appointment marked as {new_status}")
     return redirect("doctor_appointments")
 
+#--------------------------------------------------
+# Confirm an appointment
+#--------------------------------------------------
 
 @login_required_view
 def confirm_appointment(request, id):
@@ -272,6 +234,9 @@ def doctor_patients(request):
 
     return render(request, "doctor_patients.html", {"patients": patients, "doctor": doctor})
 
+#--------------------------------------------------
+# Patient History Details
+#--------------------------------------------------
 
 @login_required_view
 def patient_history(request, patient_id):
@@ -337,6 +302,9 @@ def doctor_addnotes(request):
         "note_to_edit": note_to_edit}
     return render(request, "doctor_addnotes.html", context)
 
+#------------------------------------------
+# 🗑️ Delete a note
+#------------------------------------------
 
 @login_required_view
 def delete_note(request, note_id):
@@ -372,12 +340,6 @@ def doctor_notifications(request):
 #============================
 #Add health record
 #============================
-from django.shortcuts import render, get_object_or_404
-from patients.models import HealthRecord
-from .models import Appointment
-from accounts.models import UserProfile
-from django.contrib import messages
-from django.db.models import Q
 
 @login_required_view
 def doctor_health_records(request):
@@ -420,13 +382,19 @@ def doctor_health_records(request):
     }
     return render(request, "doctor_health_records.html", context)
 
+#------------------------------------------
 # 🩺 List all records of a specific patient
+#------------------------------------------
+
 @login_required_view
 def view_health_records(request, patient_id):
     return redirect(f"/doctors/health-records/?patient={patient_id}")
 
 
+#------------------------------------------
 # ➕ Add or Edit Health Record
+#------------------------------------------
+
 @login_required_view
 def add_or_edit_health_record(request, patient_id, record_id=None):
     doctor = get_session_user(request)
@@ -481,8 +449,10 @@ def add_or_edit_health_record(request, patient_id, record_id=None):
         "record": record
     })
 
+#------------------------------------------
+# Delete a health record 
+#------------------------------------------
 
-# 🗑️ Delete a health record
 @login_required_view
 def delete_health_record(request, record_id):
     doctor = get_session_user(request)
@@ -491,12 +461,62 @@ def delete_health_record(request, record_id):
     record.delete()
     messages.success(request, "Health record deleted successfully 🗑️")
     return redirect("view_health_records", patient_id=patient_id)
+#--------------------------------------------------------------------------------------------------
 
 
-from django.shortcuts import redirect
-from django.contrib import messages
-import os
-from .models import DoctorProfile
+# ===================================================
+#  DOCTOR PROFILE
+# ===================================================
+
+@login_required_view
+def doctor_profile(request):
+    doctor = get_session_user(request)
+    if not doctor:
+        return redirect("LogInSignUppage")
+
+    profile, _ = DoctorProfile.objects.get_or_create(user=doctor)
+
+    if request.method == "POST":
+        if "profile_pic" in request.FILES:
+            profile.profile_pic = request.FILES["profile_pic"]
+            profile.save()
+            messages.success(request, "Profile picture updated successfully 💖")
+            return redirect("doctor_profile")
+
+        # Update doctor basic info
+        doctor.name = request.POST.get("name", doctor.name)
+        doctor.phone = request.POST.get("phone", doctor.phone)
+        doctor.email = request.POST.get("email", doctor.email)
+        doctor.address = request.POST.get("address", doctor.address)
+        doctor.gender = request.POST.get("gender", doctor.gender)
+        doctor.visit_fee = request.POST.get("visit_fee", doctor.visit_fee)
+        doctor.save()
+
+        # Update extended profile info
+        profile.specialization = request.POST.get("specialization", profile.specialization)
+        profile.highest_qualification = request.POST.get("highest_qualification", profile.highest_qualification)
+        profile.license = request.POST.get("license", profile.license)
+        profile.experience_years = request.POST.get("experience_years", profile.experience_years)
+        profile.expertise_areas = request.POST.get("expertise_areas", profile.expertise_areas)
+        profile.specialized_treatments = request.POST.get("specialized_treatments", profile.specialized_treatments)
+        profile.biography = request.POST.get("biography", profile.biography)
+        profile.address = request.POST.get("address", profile.address)
+        profile.save()
+
+        messages.success(request, "Profile updated successfully 💕")
+        return redirect("doctor_profile")
+
+    context = {
+        "doctor": doctor,
+        "profile": profile,
+        "genders": ["Male", "Female", "Other"],
+    }
+    return render(request, "doctor_profile.html", context)
+
+
+#------------------------------
+# Delete Doctor Profile Picture
+#------------------------------
 
 def delete_doctor_pic(request):
     if request.method == "POST":
@@ -525,3 +545,4 @@ def delete_doctor_pic(request):
             messages.warning(request, "⚠️ No profile picture found to delete.")
 
     return redirect('doctor_profile')
+
