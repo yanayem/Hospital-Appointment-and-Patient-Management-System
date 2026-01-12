@@ -1,4 +1,6 @@
-# patients/views.py
+#==========================
+#   IMPORTS
+#=========================
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils.timezone import now
@@ -12,6 +14,8 @@ from .models import (
     Prescription,
     Notification
 )
+#=========================
+
 
 # ==========================
 #   HELPERS
@@ -86,14 +90,6 @@ def patient_profile(request):
     }
     return render(request, "patient_profile.html", context)
 
-# ==========================
-#   PATIENT DASHBOARD
-# ==========================
-
-
-# ==========================
-#   APPOINTMENTS
-# ==========================
 
 # ==========================
 #   APPOINTMENTS
@@ -116,9 +112,14 @@ def book_appointment(request, doctor_id=None):
     """
     # Get patient from session
     patient = get_session_user(request)
-    if not patient or patient.user_type != "patient":
+
+    if not patient:
         login_url = reverse("LogInSignUppage")
         return redirect(f"{login_url}?next={request.path}")
+
+    # 🔥 KEY FIX
+    if patient.current_role != "patient":
+        return redirect("switch_to_patient")
 
     # List of all doctors
     doctors = DoctorProfile.objects.all()
@@ -143,12 +144,15 @@ def book_appointment(request, doctor_id=None):
             return redirect(request.path)  # redirect back to same page
 
         # Get DoctorProfile object
-        doctor = get_object_or_404(DoctorProfile, id=doctor_id_post)
+        # Get DoctorProfile object
+        doctor_profile = get_object_or_404(DoctorProfile, id=doctor_id_post)
+        doctor_user = doctor_profile.user   # ✅ FIX
+
 
         # Create appointment
         Appointment.objects.create(
             patient=patient,
-            doctor=doctor,
+            doctor=doctor_user,
             service=service,
             email=email,
             phone=phone,
@@ -161,10 +165,10 @@ def book_appointment(request, doctor_id=None):
         Notification.objects.create(
             patient=patient,
             title="Appointment Booked 💖",
-            message=f"Your appointment with Dr. {doctor.user.name} on {appointment_date} at {appointment_time} has been booked successfully."
+            message=f"Your appointment with Dr. {doctor_user.name} on {appointment_date} at {appointment_time} has been booked successfully."
         )
 
-        messages.success(request, f"Appointment booked with Dr. {doctor.user.name}! 💕")
+        messages.success(request, f"Appointment booked with Dr. {doctor_user.name}! 💕")
         return redirect('my_appointments')
 
     context = {
@@ -176,21 +180,39 @@ def book_appointment(request, doctor_id=None):
 
     return render(request, "book_appointment.html", context)
 
-from datetime import date
+from django.utils.timezone import localdate
+
 @login_required_view
 def my_appointments(request):
     patient = get_session_user(request)
     if not patient:
         return redirect("LogInSignUppage")
 
-    today = date.today()
-    todays_appointments = Appointment.objects.filter(patient=patient, date=today)
-    upcoming_appointments = Appointment.objects.filter(patient=patient, date__gt=today)
+    today = localdate()
+
+    todays_appointments = Appointment.objects.filter(
+        patient=patient,
+        date=today
+    ).exclude(
+        status__in=["Cancelled", "Completed"]
+    ).order_by("time")
+
+    upcoming_appointments = Appointment.objects.filter(
+        patient=patient,
+        date__gt=today
+    ).exclude(
+        status__in=["Cancelled", "Completed"]
+    ).order_by("date", "time")
 
     return render(request, "my_appointments.html", {
         "todays_appointments": todays_appointments,
         "upcoming_appointments": upcoming_appointments,
     })
+
+#=========================
+# action appointment
+#======================
+
 
 @login_required_view
 def edit_appointment(request, id):
@@ -221,12 +243,12 @@ def cancel_appointment(request, id):
 
         Notification.objects.create(
         patient=patient,
-        title="Appointment Cancelled 💔",
+        title="Appointment Cancelled",
         message=f"Your appointment with Dr. {appointment.doctor.name} on {appointment.date} was cancelled."
         )
         
         appointment.delete()
-        messages.success(request, f"Appointment with Dr. {appointment.doctor.name} cancelled 💔")
+        messages.success(request, f"Appointment with Dr. {appointment.doctor.name} cancelled")
         return redirect('my_appointments')
 
     return render(request, 'cancel_appointment.html', {'appointment': appointment})
@@ -357,7 +379,7 @@ from patients.models import Appointment
 def patient_dashboard(request):
     user = get_session_user(request)
     if not user:
-        return redirect("login_signup")
+        return redirect("LogInSignUppage")
 
     # Allow doctor in patient mode
     is_doctor_as_patient = user.user_type == "doctor" and getattr(user, "current_role", None) == "patient"

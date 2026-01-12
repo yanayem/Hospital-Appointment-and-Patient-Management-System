@@ -35,7 +35,6 @@
     border-radius: 8px;
   }
 
-  /* 🌸 Responsive sidebar fix */
   @media (max-width: 1024px) {
     .ml-64 {
       margin-left: 0 !important;
@@ -49,10 +48,8 @@
 
 <body class="bg-gradient-to-br from-pink-50 via-pink-100 to-pink-200 min-h-screen font-sans">
 
-  <!-- 🌸 Sidebar Include -->
   {% include 'patient_sidebar.html' %}
 
-  <!-- 🌼 Main Content -->
   <main class="lg:ml-64 px-6 sm:p-8 transition-all duration-300">
     <div class="content-container space-y-10">
       <h1 class="text-3xl font-bold text-pink-600 mb-4">💖 My Appointments</h1>
@@ -67,14 +64,13 @@
       </div>
       {% endif %}
 
-      <!-- 🩺 TODAY’S APPOINTMENTS -->
+      <!-- TODAY’S APPOINTMENTS -->
       <section>
         <h2 class="text-2xl font-semibold text-gray-700 mb-4">🩺 Today</h2>
         {% if todays_appointments %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {% for appointment in todays_appointments %}
-          <div
-            class="appointment-card rounded-2xl shadow-lg p-6
+          <div class="appointment-card rounded-2xl shadow-lg p-6
             {% if appointment.status == 'Cancelled' %}
               bg-rose-100 border border-rose-400
             {% elif appointment.status == 'Confirmed' %}
@@ -83,64 +79,52 @@
               bg-gray-100 border border-gray-400
             {% else %}
               bg-white
-            {% endif %}"
-          >
+            {% endif %}">
+            
             <div class="flex justify-between items-center mb-4">
-              <h2 class="text-xl font-bold text-pink-600">
-                Dr. {{ appointment.doctor.name }}
-              </h2>
-              <span class="appt-time">
-                {{ appointment.time|time:"h:i A" }}
-              </span>
+              <h2 class="text-xl font-bold text-pink-600">Dr. {{ appointment.doctor.name }}</h2>
+              <span class="appt-time">{{ appointment.time|time:"h:i A" }}</span>
             </div>
 
             <p class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-user text-pink-500 mr-2"></i>Patient:
-              {{ appointment.patient.name }}
+              <i class="fas fa-user text-pink-500 mr-2"></i>Patient: {{ appointment.patient.name }}
             </p>
             <p class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-envelope text-pink-500 mr-2"></i>Email:
-              {{ appointment.email }}
+              <i class="fas fa-envelope text-pink-500 mr-2"></i>Email: {{ appointment.email }}
             </p>
             <p class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-phone text-pink-500 mr-2"></i>Phone:
-              {{ appointment.phone }}
+              <i class="fas fa-phone text-pink-500 mr-2"></i>Phone: {{ appointment.phone }}
             </p>
             <p class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-stethoscope text-pink-500 mr-2"></i>Service:
-              {{ appointment.service }}
+              <i class="fas fa-stethoscope text-pink-500 mr-2"></i>Service: {{ appointment.service }}
             </p>
-
             {% if appointment.reason %}
             <p class="flex items-start text-gray-700">
-              <i class="fas fa-clipboard text-pink-500 mr-2 mt-1"></i>Reason:
-              {{ appointment.reason }}
+              <i class="fas fa-clipboard text-pink-500 mr-2 mt-1"></i>Reason: {{ appointment.reason }}
             </p>
             {% endif %}
 
-            <div class="mt-4 text-right">
+            <div class="mt-4 flex justify-between items-center">
+              <!-- Status Badge -->
               {% if appointment.status == 'Confirmed' %}
-              <span
-                class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold"
-                >✅ Confirmed</span
-              >
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">✅ Confirmed</span>
               {% elif appointment.status == 'Cancelled' %}
-              <span
-                class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-sm font-semibold"
-                >❌ Cancelled</span
-              >
+                <span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-sm font-semibold">❌ Cancelled</span>
               {% elif appointment.status == 'Completed' %}
-              <span
-                class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-semibold"
-                >✔ Completed</span
-              >
+                <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-semibold">✔ Completed</span>
               {% else %}
-              <span
-                class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold"
-                >🕒 Pending</span
-              >
+                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">🕒 Pending</span>
               {% endif %}
+
+              <!-- Action Buttons -->
+              <div class="space-x-2">
+                {% if appointment.status != 'Completed' and appointment.status != 'Cancelled' %}
+                  <a href="{% url 'edit_appointment' appointment.id %}" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Edit</a>
+                  <a href="{% url 'cancel_appointment' appointment.id %}" onclick="return confirm('Are you sure you want to cancel this appointment?');" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">Cancel</a>
+                {% endif %}
+              </div>
             </div>
+
           </div>
           {% endfor %}
         </div>
@@ -149,14 +133,13 @@
         {% endif %}
       </section>
 
-      <!-- 🌷 UPCOMING APPOINTMENTS -->
+      <!-- UPCOMING APPOINTMENTS -->
       <section>
         <h2 class="text-2xl font-semibold text-gray-700 mb-4">🌸 Upcoming</h2>
         {% if upcoming_appointments %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {% for appointment in upcoming_appointments %}
-          <div
-            class="appointment-card rounded-2xl shadow-lg p-6
+          <div class="appointment-card rounded-2xl shadow-lg p-6
             {% if appointment.status == 'Cancelled' %}
               bg-rose-100 border border-rose-400
             {% elif appointment.status == 'Confirmed' %}
@@ -165,65 +148,50 @@
               bg-gray-100 border border-gray-400
             {% else %}
               bg-white
-            {% endif %}"
-          >
+            {% endif %}">
+            
             <div class="flex justify-between items-center mb-4">
-              <h2 class="text-xl font-bold text-pink-600">
-                Dr. {{ appointment.doctor.name }}
-              </h2>
-              <span class="appt-time">
-                {{ appointment.date|date:"M d, Y" }} at
-                {{ appointment.time|time:"h:i A" }}
-              </span>
+              <h2 class="text-xl font-bold text-pink-600">Dr. {{ appointment.doctor.name }}</h2>
+              <span class="appt-time">{{ appointment.date|date:"M d, Y" }} at {{ appointment.time|time:"h:i A" }}</span>
             </div>
 
             <p class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-user text-pink-500 mr-2"></i>Patient:
-              {{ appointment.patient.name }}
+              <i class="fas fa-user text-pink-500 mr-2"></i>Patient: {{ appointment.patient.name }}
             </p>
             <p class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-envelope text-pink-500 mr-2"></i>Email:
-              {{ appointment.email }}
+              <i class="fas fa-envelope text-pink-500 mr-2"></i>Email: {{ appointment.email }}
             </p>
             <p class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-phone text-pink-500 mr-2"></i>Phone:
-              {{ appointment.phone }}
+              <i class="fas fa-phone text-pink-500 mr-2"></i>Phone: {{ appointment.phone }}
             </p>
             <p class="flex items-center text-gray-700 mb-2">
-              <i class="fas fa-stethoscope text-pink-500 mr-2"></i>Service:
-              {{ appointment.service }}
+              <i class="fas fa-stethoscope text-pink-500 mr-2"></i>Service: {{ appointment.service }}
             </p>
-
             {% if appointment.reason %}
             <p class="flex items-start text-gray-700">
-              <i class="fas fa-clipboard text-pink-500 mr-2 mt-1"></i>Reason:
-              {{ appointment.reason }}
+              <i class="fas fa-clipboard text-pink-500 mr-2 mt-1"></i>Reason: {{ appointment.reason }}
             </p>
             {% endif %}
 
-            <div class="mt-4 text-right">
+            <div class="mt-4 flex justify-between items-center">
               {% if appointment.status == 'Confirmed' %}
-              <span
-                class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold"
-                >✅ Confirmed</span
-              >
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">✅ Confirmed</span>
               {% elif appointment.status == 'Cancelled' %}
-              <span
-                class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-sm font-semibold"
-                >❌ Cancelled</span
-              >
+                <span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-sm font-semibold">❌ Cancelled</span>
               {% elif appointment.status == 'Completed' %}
-              <span
-                class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-semibold"
-                >✔ Completed</span
-              >
+                <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-semibold">✔ Completed</span>
               {% else %}
-              <span
-                class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold"
-                >🕒 Pending</span
-              >
+                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">🕒 Pending</span>
               {% endif %}
+
+              <div class="space-x-2">
+                {% if appointment.status != 'Completed' and appointment.status != 'Cancelled' %}
+                  <a href="{% url 'edit_appointment' appointment.id %}" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Edit</a>
+                  <a href="{% url 'cancel_appointment' appointment.id %}" onclick="return confirm('Are you sure you want to cancel this appointment?');" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">Cancel</a>
+                {% endif %}
+              </div>
             </div>
+
           </div>
           {% endfor %}
         </div>
@@ -231,6 +199,7 @@
         <p class="text-gray-500 italic">No upcoming appointments 🌸</p>
         {% endif %}
       </section>
+
     </div>
   </main>
 

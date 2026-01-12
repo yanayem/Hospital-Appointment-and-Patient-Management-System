@@ -10,10 +10,10 @@ urlpatterns = [
     path('profile/delete-pic/', views.delete_patient_pic, name='delete_patient_pic'),
 
     # Booking page without a doctor selected
-path('book/', views.book_appointment, name='book_appointment'),
+    path('book/', views.book_appointment, name='book_appointment'),
 
 # Booking page with a doctor selected
-path("book-appointment/<int:doctor_id>/", views.book_appointment, name="book_appointment_with_id"),
+    path("book-appointment/<int:doctor_id>/", views.book_appointment, name="book_appointment_with_id"),
 
 
     path('appointments/', views.my_appointments, name='my_appointments'),
@@ -23,7 +23,6 @@ path("book-appointment/<int:doctor_id>/", views.book_appointment, name="book_app
     path('notifications/', views.notifications, name='notifications'),
     path('appointments/edit/<int:id>/', views.edit_appointment, name='edit_appointment'),
     path('appointments/cancel/<int:id>/', views.cancel_appointment, name='cancel_appointment'),
-    path("contact-support/", views.contact_support, name="contact_support"),
 ]
 
 

@@ -1,186 +1,220 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hospital Management | Home</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medicare Hospital | Home</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
-      defer
-    ></script>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <style>
-      /* Soft entry animations */
-      @keyframes fadeInUp {
-        0% {
-          opacity: 0;
-          transform: translateY(40px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
+  <!-- FontAwesome -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+    defer
+  ></script>
+
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
       }
-
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
+    }
+    .fade-in-up {
+      animation: fadeInUp 1s ease forwards;
+    }
+  </style>
+</head>
 
-      .fade-in-up {
-        animation: fadeInUp 1s ease forwards;
-      }
+<body class="bg-gradient-to-b from-rose-50 via-pink-50 to-rose-100 text-gray-800">
 
-      .fade-in {
-        animation: fadeIn 1.5s ease forwards;
-      }
-    </style>
-  </head>
+{% include "nav.html" %}
 
-  <body class="bg-gradient-to-b from-rose-50 via-pink-50 to-rose-100 text-gray-800 overflow-x-hidden">
-    {% include "nav.html" %}
+<!-- ================= HERO ================= -->
+<section class="min-h-screen flex items-center pt-28 px-6 bg-gradient-to-r from-pink-100 via-rose-50 to-pink-200">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center fade-in-up">
 
-    <!-- ================= HOME / INTRO ================= -->
-    <section
-      class="home-section min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24 md:pt-32 bg-gradient-to-r from-pink-100 via-rose-50 to-pink-200"
-    >
-      <div
-        class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center fade-in-up"
+    <div class="space-y-5">
+      <h1 class="text-4xl md:text-5xl font-bold text-rose-700 leading-snug">
+        We Help People Get Appointments Online 💖
+      </h1>
+      <p class="text-lg text-gray-700">
+        Book doctors, manage appointments, and access medical records — all in one place.
+      </p>
+      <a
+        href="{% url 'DoctorInfo' %}"
+        class="inline-block bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition"
       >
-        <div class="text-left md:text-left space-y-5">
-          <h1 class="text-4xl md:text-5xl font-bold text-rose-700 leading-snug">
-            We Help People Get Appointments Online 💖
-          </h1>
-          <p class="text-lg text-gray-700">
-            Book, track, and manage your medical appointments with ease. Connect
-            with top doctors and access your health records anytime.
-          </p>
-          <a
-            href="#"
-            class="inline-block bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full shadow-lg hover:from-pink-600 hover:to-rose-600 transition transform hover:scale-105"
-            >Get Started</a
-          >
-        </div>
+        Find Doctors
+      </a>
+    </div>
 
-        <div class="flex justify-center fade-in">
-          <img
-            src="{% static 'media/Vector.png' %}"
-            alt="Hospital Service"
-            class="w-full max-w-md rounded-2xl shadow-lg"
-          />
-        </div>
+    <div class="flex justify-center">
+      <img
+        src="{% static 'media/Vector.png' %}"
+        alt="Hospital Illustration"
+        class="w-full max-w-md rounded-2xl shadow-lg"
+      />
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= WHO WE ARE ================= -->
+<section class="py-20 text-center bg-white">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-rose-700 mb-6">Who We Are 🌷</h2>
+    <p class="text-gray-700 text-lg leading-relaxed">
+      Medicare Hospital connects patients and healthcare providers through
+      modern technology, ensuring fast, reliable, and compassionate care.
+    </p>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="py-20 bg-gradient-to-b from-pink-100 via-rose-50 to-rose-100">
+  <div class="max-w-6xl mx-auto text-center px-6">
+    <h2 class="text-3xl font-bold text-rose-700 mb-12">Our Services 💎</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition">
+        <i class="fas fa-user-md text-rose-500 text-4xl mb-4"></i>
+        <h3 class="text-xl font-semibold mb-2">Online Appointments</h3>
+        <p class="text-gray-600">Book doctors anytime, anywhere.</p>
       </div>
-    </section>
 
-    <!-- ================= WHO WE ARE ================= -->
-    <section
-      class="py-20 bg-gradient-to-r from-rose-50 to-pink-100 text-center fade-in-up"
+      <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition">
+        <i class="fas fa-file-medical text-rose-500 text-4xl mb-4"></i>
+        <h3 class="text-xl font-semibold mb-2">Medical Records</h3>
+        <p class="text-gray-600">Secure access to reports & prescriptions.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition">
+        <i class="fas fa-hospital text-rose-500 text-4xl mb-4"></i>
+        <h3 class="text-xl font-semibold mb-2">Hospital Management</h3>
+        <p class="text-gray-600">Efficient hospital & patient workflow.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition">
+        <i class="fas fa-ambulance text-rose-500 text-4xl mb-4"></i>
+        <h3 class="text-xl font-semibold mb-2">Emergency Care</h3>
+        <p class="text-gray-600">Fast ambulance & emergency services.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="py-20 bg-white">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+
+    <!-- Title -->
+    <h2 class="text-4xl font-bold text-rose-700 mb-4">
+      Send Us a Message 💌
+    </h2>
+    <p class="text-gray-500 mb-10">
+      We’d love to hear from you. Our team will get back to you shortly.
+    </p>
+
+    <!-- Contact Form -->
+    <form
+      method="POST"
+      action="{% url 'contact_support' %}"
+      class="bg-rose-50 p-8 rounded-3xl shadow-xl space-y-5 text-left"
     >
-      <div class="max-w-4xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-rose-700 mb-6">Who We Are 🌷</h2>
-        <p class="text-gray-700 leading-relaxed text-lg">
-          We are a team of professionals dedicated to building a bridge between
-          patients and hospitals. Our mission is to make healthcare easily
-          accessible through technology and compassion.
-        </p>
+      {% csrf_token %}
+
+      <!-- Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Your Name
+        </label>
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter your name"
+          required
+          class="w-full px-4 py-3 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+        />
       </div>
-    </section>
 
-    <!-- ================= SERVICES ================= -->
-    <section
-      class="py-20 bg-gradient-to-b from-pink-100 via-rose-50 to-rose-100 fade-in-up"
-    >
-      <div class="max-w-6xl mx-auto text-center px-6">
-        <h2 class="text-3xl font-bold text-rose-700 mb-12">Our Services 💎</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div
-            class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2"
-          >
-            <i class="fas fa-user-md text-rose-500 text-4xl mb-4"></i>
-            <h3 class="text-xl font-semibold mb-2">Online Appointments</h3>
-            <p class="text-gray-600">
-              Book doctors instantly from the comfort of your home.
-            </p>
-          </div>
-
-          <div
-            class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2"
-          >
-            <i class="fas fa-hospital text-rose-500 text-4xl mb-4"></i>
-            <h3 class="text-xl font-semibold mb-2">Hospital Management</h3>
-            <p class="text-gray-600">
-              Streamline operations and patient management efficiently.
-            </p>
-          </div>
-
-          <div
-            class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2"
-          >
-            <i class="fas fa-file-medical text-rose-500 text-4xl mb-4"></i>
-            <h3 class="text-xl font-semibold mb-2">Medical Records</h3>
-            <p class="text-gray-600">
-              Access all your reports and prescriptions digitally.
-            </p>
-          </div>
-
-          <div
-            class="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2"
-          >
-            <i class="fas fa-ambulance text-rose-500 text-4xl mb-4"></i>
-            <h3 class="text-xl font-semibold mb-2">Emergency Care</h3>
-            <p class="text-gray-600">
-              Instant response and ambulance booking at your fingertips.
-            </p>
-          </div>
-        </div>
+      <!-- Email -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Your Email
+        </label>
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          required
+          class="w-full px-4 py-3 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+        />
       </div>
-    </section>
 
-    <!-- ================= CONTACT ================= -->
-    <section
-      class="py-20 bg-gradient-to-r from-rose-100 to-pink-200 text-center fade-in-up"
-    >
-      <div class="max-w-3xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-rose-700 mb-6">
-          Send Us a Message 💌
-        </h2>
-        <form
-          class="bg-white p-8 rounded-2xl shadow-lg space-y-4 text-left fade-in"
-        >
-          <input
-            type="text"
-            placeholder="Your Name"
-            required
-            class="w-full px-4 py-3 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-          />
-          <input
-            type="email"
-            placeholder="Your Email"
-            required
-            class="w-full px-4 py-3 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-          />
-          <textarea
-            placeholder="Your Message"
-            required
-            class="w-full px-4 py-3 border border-pink-200 rounded-lg h-32 resize-none focus:outline-none focus:ring-2 focus:ring-pink-400"
-          ></textarea>
-          <button
-            type="submit"
-            class="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 rounded-full shadow-lg hover:from-pink-600 hover:to-rose-600 transition transform hover:scale-105"
-          >
-            Send Message
-          </button>
-        </form>
+      <!-- Message -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          Your Message
+        </label>
+        <textarea
+          name="message"
+          rows="5"
+          placeholder="Write your message here..."
+          required
+          class="w-full px-4 py-3 border border-pink-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-pink-400"
+        ></textarea>
       </div>
-    </section>
 
-    {% include "footer.html" %}
-  </body>
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 rounded-full shadow-lg hover:scale-105 transition transform flex justify-center items-center gap-2"
+      >
+        <i class="fa-solid fa-paper-plane"></i> Send Message
+      </button>
+    </form>
+  </div>
+
+  <!-- Toast / Popup Message -->
+  {% if messages %}
+    <div id="toast" class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-xl shadow-lg flex items-center gap-3 opacity-0 translate-y-10 transition-all duration-500 z-50">
+      <i class="fa-solid fa-circle-check text-lg"></i>
+      <span id="toast-message"></span>
+    </div>
+
+    <script>
+      // Show toast with message
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      {% for message in messages %}
+        toastMessage.textContent = "{{ message }}";
+      {% endfor %}
+
+      // Animate in
+      toast.classList.remove('opacity-0', 'translate-y-10');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      // Auto hide after 4 seconds
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-10');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 4000);
+    </script>
+  {% endif %}
+</section>
+
+
+
+{% include "footer.html" %}
+
+</body>
 </html>

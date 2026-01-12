@@ -1,116 +1,207 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Our Doctors</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+<head>
+  <meta charset="UTF-8" />
+  <title>Our Doctors</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+
+  <style>
+    .doctor-card {
+      transition: all 0.3s ease;
+    }
+    .doctor-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 10px 20px rgba(244, 114, 182, 0.25);
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 min-h-screen text-gray-700">
+
+{% include "nav.html" %}
+
+<!-- ================= HEADER ================= -->
+<header class="mt-20 text-center py-10">
+  <h1 class="text-4xl font-bold text-pink-700">Our Doctors</h1>
+  <p class="text-gray-500 mt-2">
+    Meet our experienced and compassionate medical professionals
+  </p>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 pb-20">
+
+<!-- ================= FILTER BAR ================= -->
+<div class="bg-white rounded-3xl shadow-md p-6 mb-12">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+    <!-- Search -->
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="🔍 Search doctor name..."
+      class="w-full px-4 py-2 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-300"
     />
-    <style>
-      .doctor-card {
-        transition: all 0.3s ease;
-      }
-      .doctor-card:hover {
-        transform: translateY(-6px) scale(1.02);
-        box-shadow: 0 10px 20px rgba(244, 114, 182, 0.2);
-      }
-    </style>
-  </head>
 
-  <body
-    class="bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 min-h-screen text-gray-700 font-sans"
-  >
-    {% include "nav.html" %}
+    <!-- Specialization -->
+    <select id="specializationFilter"
+      class="w-full px-4 py-2 border border-pink-200 rounded-xl">
+      <option value="">All Specializations</option>
+      {% for doctor in doctors %}
+        {% if doctor.specialization %}
+          <option value="{{ doctor.specialization|lower }}">
+            {{ doctor.specialization }}
+          </option>
+        {% endif %}
+      {% endfor %}
+    </select>
 
-    <header class="mt-16 text-center py-10">
-      <h1 class="text-3xl font-bold text-pink-700 tracking-wide">
-        Our Doctors
-      </h1>
-      <p class="text-gray-500 mt-2 text-sm md:text-base">
-        Meet our experienced and compassionate medical professionals
+    <!-- Gender -->
+    <select id="genderFilter"
+      class="w-full px-4 py-2 border border-pink-200 rounded-xl">
+      <option value="">All Genders</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+
+    <!-- Fee -->
+    <div>
+      <input
+        type="range"
+        id="feeFilter"
+        min="0"
+        max="5000"
+        step="100"
+        value="5000"
+        class="w-full accent-pink-500"
+      />
+      <p class="text-sm text-gray-500 mt-1">
+        Max Fee:
+        <span id="feeValue" class="font-semibold text-pink-600">5000</span> ৳
       </p>
-    </header>
+    </div>
+  </div>
+</div>
 
-    <main class="max-w-6xl mx-auto px-4 pb-16">
-      {% if doctors %}
-      <div
-        class="doctor-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
-      >
-        {% for doctor in doctors %}
-        <div
-          class="doctor-card bg-white rounded-3xl shadow-md overflow-hidden hover:shadow-xl transition text-center"
-        >
-          <!-- Doctor Image -->
-          <div class="relative">
-            <img 
-  src="{% if doctor.profile_pic %}
-          {{ doctor.profile_pic.url }}
-        {% elif doctor.gender|default:doctor.user.gender == 'Female' %}
-          {% static 'media/women.jpg' %}
-        {% elif doctor.gender|default:doctor.user.gender == 'Male' %}
-          {% static 'media/men.jpg' %}
-        {% else %}
-          {% static 'img/default-doctor.png' %}
-        {% endif %}" 
-  alt="{{ doctor.user.name }}"
-  class="w-full h-56 object-cover rounded-t-2xl border-b border-pink-100 transform hover:scale-105 transition duration-500 ease-in-out"
-/>
+<!-- ================= DOCTOR LIST ================= -->
+{% if doctors %}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 
-            <div class="absolute bottom-0 left-0 right-0 h-16"></div>
-          </div>
+{% for doctor in doctors %}
+<div
+  class="doctor-card bg-white rounded-3xl shadow-md overflow-hidden text-center"
+  data-name="{{ doctor.user.name|lower }}"
+  data-specialization="{{ doctor.specialization|lower }}"
+  data-gender="{{ doctor.user.gender }}"
+  data-fee="{{ doctor.user.visit_fee|default:0 }}"
+>
 
-          <!-- Doctor Info -->
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-pink-700">
-              Dr. {{ doctor.user.name }}
-            </h3>
-            <p class="text-gray-600 text-sm mt-1">
-              <i class="fa-solid fa-stethoscope text-pink-400 mr-1"></i>
-              {{ doctor.specialization|default:"General Practitioner" }}
-            </p>
+  <!-- Image -->
+  <img
+    src="{% if doctor.profile_pic %}
+           {{ doctor.profile_pic.url }}
+         {% elif doctor.user.gender == 'Female' %}
+           {% static 'media/women.jpg' %}
+         {% else %}
+           {% static 'media/men.jpg' %}
+         {% endif %}"
+    class="w-full h-56 object-cover"
+  />
 
-            {% if doctor.highest_qualification %}
-            <p class="text-gray-500 text-sm mt-2">
-              <i class="fa-solid fa-graduation-cap text-pink-400 mr-1"></i>
-              {{ doctor.highest_qualification }}
-            </p>
-            {% endif %}
+  <!-- Info -->
+  <div class="p-6 space-y-2">
+    <h3 class="text-xl font-bold text-pink-700">
+      Dr. {{ doctor.user.name }}
+    </h3>
 
-            <p class="text-gray-500 text-sm mt-2">
-              <i class="fa-solid fa-briefcase-medical text-pink-400 mr-1"></i>
-              {{ doctor.experience_years }} years experience
-            </p>
+    <p class="text-gray-600 text-sm">
+      <i class="fa-solid fa-stethoscope text-pink-400"></i>
+      {{ doctor.specialization|default:"General Practitioner" }}
+    </p>
 
-            <p class="text-gray-500 text-sm mt-2">
-              <i class="fa-solid fa-money-bill-wave text-pink-400 mr-1"></i>
-              Consultation  Fee:
-              <span class="font-medium text-pink-600"
-                >{{ doctor.user.visit_fee }} ৳</span
-              >
-            </p>
+    <p class="text-gray-500 text-sm">
+      <i class="fa-solid fa-briefcase-medical text-pink-400"></i>
+      {{ doctor.experience_years }} years experience
+    </p>
 
-            <!-- Button -->
-          <a href="{% url 'LogInSignUppage' %}?next={% url 'book_appointment_with_id' doctor.id %}"
-   class="inline-flex items-center justify-center gap-2 mt-5 px-5 py-2.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white font-medium rounded-full shadow-sm hover:scale-105 transition-transform duration-200">
-   <i class="fa-solid fa-calendar-check"></i> Book Appointment
-</a>
+    <p class="text-gray-500 text-sm">
+      <i class="fa-solid fa-money-bill-wave text-pink-400"></i>
+      Fee:
+      <span class="font-semibold text-pink-600">
+        {{ doctor.user.visit_fee }} ৳
+      </span>
+    </p>
 
+    <!-- Book Button -->
+    <a
+      href="{% url 'LogInSignUppage' %}?next={% url 'book_appointment_with_id' doctor.id %}"
+      class="inline-flex items-center gap-2 mt-4 px-6 py-2.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white rounded-full shadow hover:scale-105 transition">
+      <i class="fa-solid fa-calendar-check"></i>
+      Book Appointment
+    </a>
+  </div>
 
+</div>
+{% endfor %}
+</div>
 
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% else %}
-      <p class="text-center text-gray-500 text-lg mt-10">
-        No doctors available yet
-      </p>
-      {% endif %}
-    </main>
+{% else %}
+<p class="text-center text-gray-500 text-lg mt-10">
+  No doctors available yet 😔
+</p>
+{% endif %}
 
-    {% include "footer.html" %}
-  </body>
+</main>
+
+{% include "footer.html" %}
+
+<!-- ================= FILTER SCRIPT ================= -->
+<script>
+  const searchInput = document.getElementById("searchInput");
+  const specializationFilter = document.getElementById("specializationFilter");
+  const genderFilter = document.getElementById("genderFilter");
+  const feeFilter = document.getElementById("feeFilter");
+  const feeValue = document.getElementById("feeValue");
+
+  const cards = document.querySelectorAll(".doctor-card");
+
+  feeFilter.addEventListener("input", () => {
+    feeValue.textContent = feeFilter.value;
+    filterDoctors();
+  });
+
+  searchInput.addEventListener("input", filterDoctors);
+  specializationFilter.addEventListener("change", filterDoctors);
+  genderFilter.addEventListener("change", filterDoctors);
+
+  function filterDoctors() {
+    const search = searchInput.value.toLowerCase();
+    const specialization = specializationFilter.value;
+    const gender = genderFilter.value;
+    const maxFee = parseInt(feeFilter.value);
+
+    cards.forEach(card => {
+      const name = card.dataset.name;
+      const spec = card.dataset.specialization;
+      const cardGender = card.dataset.gender;
+      const fee = parseInt(card.dataset.fee);
+
+      const show =
+        name.includes(search) &&
+        (!specialization || spec === specialization) &&
+        (!gender || cardGender === gender) &&
+        fee <= maxFee;
+
+      card.style.display = show ? "block" : "none";
+    });
+  }
+</script>
+
+</body>
 </html>
